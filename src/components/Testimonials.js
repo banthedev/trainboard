@@ -86,58 +86,55 @@ export default function Testimonials() {
     <Box bg={useColorModeValue('gray.100', 'gray.700')}>
       <Container maxW={'7xl'} py={16} as={Stack} spacing={12}>
         <Stack spacing={0} align={'center'}>
-          <Heading>Our Clients Speak</Heading>
-          <Text>We have been working with clients around the world</Text>
+          <Heading>Our Customers Speak</Heading>
+          <Text>We have been working with people from around the world</Text>
         </Stack>
         <Stack
           direction={{ base: 'column', md: 'row' }}
           spacing={{ base: 10, md: 4, lg: 10 }}>
           <Testimonial>
             <TestimonialContent>
-              <TestimonialHeading>Efficient Collaborating</TestimonialHeading>
+              <TestimonialHeading>Efficient Accessibility</TestimonialHeading>
               <TestimonialText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor
-                neque sed imperdiet nibh lectus feugiat nunc sem.
+                TrainBoard allows me to easily create workouts and share them with clients. Whether it be via the share link or PDF.
               </TestimonialText>
             </TestimonialContent>
             <TestimonialAvatar
               src={
-                'https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80'
+                'https://images.unsplash.com/photo-1550345332-09e3ac987658?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'
               }
               name={'Jane Cooper'}
-              title={'CEO at ABC Corporation'}
+              title={'Powerlifting Coach at Team NORI'}
             />
           </Testimonial>
           <Testimonial>
             <TestimonialContent>
               <TestimonialHeading>Intuitive Design</TestimonialHeading>
               <TestimonialText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor
-                neque sed imperdiet nibh lectus feugiat nunc sem.
+                My clients and peers have found absolutely no issue when using TrainBoard. Everything they need is at their fingertips.
               </TestimonialText>
             </TestimonialContent>
             <TestimonialAvatar
               src={
-                'https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80'
+                'https://images.unsplash.com/photo-1611672585731-fa10603fb9e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'
               }
-              name={'Jane Cooper'}
-              title={'CEO at ABC Corporation'}
+              name={'John Mueller'}
+              title={'Fitness Trainer at Equinox'}
             />
           </Testimonial>
           <Testimonial>
             <TestimonialContent>
-              <TestimonialHeading>Mindblowing Service</TestimonialHeading>
+              <TestimonialHeading>Mindblowing Workouts</TestimonialHeading>
               <TestimonialText>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Auctor
-                neque sed imperdiet nibh lectus feugiat nunc sem.
+                It's been a struggle to find good workouts online, but TrainBoard has made it easy for me to explore workouts that work for me.
               </TestimonialText>
             </TestimonialContent>
             <TestimonialAvatar
               src={
-                'https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80'
+                'https://images.unsplash.com/photo-1542948843-bf19f4f535cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'
               }
-              name={'Jane Cooper'}
-              title={'CEO at ABC Corporation'}
+              name={'Josh Hayman'}
+              title={'TrainBoard User & Father'}
             />
           </Testimonial>
         </Stack>

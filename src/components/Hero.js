@@ -2,31 +2,41 @@ import {
     Box,
     Heading,
     Container,
+    Flex,
     Text,
     Button,
     Stack,
+    Image,
     Center,
     createIcon,
+    VStack,
 } from '@chakra-ui/react';
 
 export default function Hero() {
 
     return (
         <>
-            <Container maxW={'3xl'}>
-                <Stack
-                    as={Box}
+            <Flex
+                w={'full'}
+                backgroundImage={
+                    'https://img.freepik.com/free-vector/red-wavy-halftone-background_1409-1286.jpg?w=1380&t=st=1679439947~exp=1679440547~hmac=0bdb58f134fb3257ec07995ec16081f1f972011f30762e349c2d8245738e13f9'
+                }
+                backgroundSize={'cover'}
+                backgroundPosition={'center center'}
+            >
+                <VStack
                     textAlign={'center'}
+                    w={'full'}
+                    justify={'center'}
                     spacing={{ base: 8, md: 14 }}
-                    py={{ base: 20, md: 36 }}>
-                    <Heading
-                        fontWeight={600}
-                        fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
-                        lineHeight={'110%'}>
-                        TrainBoard
-
-                    </Heading>
-                    <Text color={'gray.500'}>
+                    py={{ base: 16, md: 32 }}>
+                    <Box w={{sm: "400px", base: "300px", md: "500px"}}>
+                        <Image
+                            src="trainboard_full.png"
+                            alt="TrainBoard"
+                        />
+                    </Box>
+                    <Text color={'gray.300'} fontSize="xl">
                         A centralized solution for all your workout needs.
                     </Text>
                     <Center>
@@ -38,7 +48,7 @@ export default function Hero() {
                             _hover={{
                                 bg: 'red.700',
                             }}>
-                                Get Started
+                            Get Started
                         </Button>
                         <Button
                             colorScheme={'green'}
@@ -52,8 +62,8 @@ export default function Hero() {
                             Explore Workouts
                         </Button>
                     </Center>
-                </Stack>
-            </Container>
+                </VStack>
+            </Flex>
         </>
     );
 }
