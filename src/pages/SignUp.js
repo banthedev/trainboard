@@ -14,6 +14,7 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import Navbar from "../components/Navbar";
+
 export default function SignIn() {
 
     return (
@@ -55,7 +56,7 @@ export default function SignIn() {
                                     direction={{ base: 'column', sm: 'row' }}
                                     align={'center'}
                                     justify={'space-between'}>
-                                    <Link color={'blue.400'} to='/signin'>Already have an account? Sign in</Link>
+                                  <Link to="/signin">Already have an account? Sign in</Link>
                                 </Stack>
                                 <Button
                                     bg={'blue.400'}
