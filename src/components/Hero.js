@@ -11,6 +11,7 @@ import {
     createIcon,
     VStack,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 export default function Hero() {
 
@@ -40,17 +41,21 @@ export default function Hero() {
                         A centralized solution for all your workout needs.
                     </Text>
                     <Center>
-                        <Button
+                        <Link to="/signup"><Button
                             colorScheme={'green'}
                             bg={'red.600'}
                             rounded={'full'}
                             px={6}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                window.location.href='/signup';
+                                }}
                             _hover={{
                                 bg: 'red.700',
                             }}>
                             Get Started
-                        </Button>
-                        <Button
+                        </Button></Link>
+                        <Link to="/explore"><Button
                             colorScheme={'green'}
                             bg={'red.600'}
                             rounded={'full'}
@@ -60,7 +65,7 @@ export default function Hero() {
                                 bg: 'red.700',
                             }}>
                             Explore Workouts
-                        </Button>
+                        </Button></Link>
                     </Center>
                 </VStack>
             </Flex>
