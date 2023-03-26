@@ -4,24 +4,33 @@ import {
     HStack,
     Text,
     VStack,
-    List,
-    ListItem,
     Button,
-    Avatar
+    Avatar,
 } from '@chakra-ui/react';
 
 const users = [
     {
         workoutName: "Arm Shredder",
         creator: "Rich P",
-        labels: ["Arms", "Biceps"]
+        labels: ["0"]
     },
     {
         workoutName: "Back Day #5",
         creator: "Chris Bumsteed",
-        labels: ["Lat", "Upper Back"]
+        labels: ["2", "4"]
+    },
+    {
+        workoutName: "Shoulder day",
+        creator: "Big Boi",
+        labels: ["4"]
     }
 ]
+
+var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'pink'];
+var textColors = ['black', 'white', 'white', 'black', 'black', 'black'];
+var muscles =["ARMS", "CHEST", "BACK", "LEGS", "SHOULDERS", "CARDIO"];
+
+
 
 function WorkoutWrapper({ children }) {
     return (
@@ -77,13 +86,13 @@ function Cards({ workoutName, creator, labels }) {
                 bg={'white'}
                 py={4}
                 borderBottomRadius={'xl'}>
-                <List spacing={3} textAlign="center" px={12}>
+                <HStack spacing={3} textAlign="center" px={12}>
                     {labels.map((label) => (
-                        <ListItem>
-                            {label}
-                        </ListItem>
+                            <text style={{backgroundColor:colors[label], color:textColors[label], borderRadius:20, padding:5}} >
+                                {muscles[label]}
+                            </text>
                     ))}
-                </List>
+                </HStack>
 
                 <Box w="80%" pt={7}>
                     <Button w="full" colorScheme="red" variant="outline">
@@ -106,7 +115,12 @@ export default function WorkoutCards() {
                 spacing={{ base: 4, lg: 10 }}
                 py={10}>
                 {users.map((user) => (
-                    <Cards workoutName={user.workoutName} creator={user.creator} labels={user.labels} key={user.workoutName} />
+                    <div class="workoutclass">
+                        <style>
+                            {'.workoutclass {width:25%; height:20%}'}
+                        </style>
+                        <Cards workoutName={user.workoutName} creator={user.creator} labels={user.labels} key={user.workoutName} />
+                    </div>
                 ))}
             </Stack>
         </Box>
