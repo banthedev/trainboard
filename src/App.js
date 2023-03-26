@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import Explore from './pages/Explore';
 import HomePage from './pages/Home';
 import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/signup" element={<SignUp />} />
+                        <Route path="/signin" element={<SignIn />} />
                     </Routes>
                 </div>
             </BrowserRouter>

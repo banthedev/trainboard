@@ -46,10 +46,6 @@ export default function Hero() {
                             bg={'red.600'}
                             rounded={'full'}
                             px={6}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                window.location.href='/signup';
-                                }}
                             _hover={{
                                 bg: 'red.700',
                             }}>
