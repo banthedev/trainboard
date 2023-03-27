@@ -1,9 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-
 const firebaseConfig = {
-    apiKey: "AIzaSyCNJ-hOvVLDAHmHT_4qnuae6aAC7_CIgoc",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_AUTH_DOMAIN,
     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
     storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
@@ -12,9 +11,7 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
-
-// Initialize Firebase
-
+// Initialize Firebase with a variable equal to firebase config
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export default app;
