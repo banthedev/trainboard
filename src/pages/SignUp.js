@@ -1,4 +1,3 @@
-
 import {
     Flex,
     Box,
@@ -7,13 +6,13 @@ import {
     Input,
     Checkbox,
     Stack,
-    Link,
     Button,
     Heading,
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
 import Navbar from "../components/Navbar";
+import { Link } from 'react-router-dom';
 export default function SignIn() {
 
     return (
@@ -51,12 +50,9 @@ export default function SignIn() {
                                 <Input type="password" />
                             </FormControl>
                             <Stack spacing={10}>
-                                <Stack
-                                    direction={{ base: 'column', sm: 'row' }}
-                                    align={'center'}
-                                    justify={'space-between'}>
-                                    <Link color={'blue.400'} to='/signin'>Already have an account? Sign in</Link>
-                                </Stack>
+                            <Link to='/signin'><Button direction={{ base: 'column', sm: 'row' }} align={'center'} justify={'space-between'}>
+                                        Already have an account? Sign in
+                                        </Button></Link>
                                 <Button
                                     bg={'blue.400'}
                                     color={'white'}
