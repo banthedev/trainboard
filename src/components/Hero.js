@@ -20,7 +20,7 @@ export default function Hero() {
             <Flex
                 w={'full'}
                 backgroundImage={
-                    'https://img.freepik.com/free-vector/red-wavy-halftone-background_1409-1286.jpg?w=1380&t=st=1679439947~exp=1679440547~hmac=0bdb58f134fb3257ec07995ec16081f1f972011f30762e349c2d8245738e13f9'
+                    'red_background.jpg'
                 }
                 backgroundSize={'cover'}
                 backgroundPosition={'center center'}

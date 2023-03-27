@@ -11,6 +11,7 @@ import {
     Heading,
     Text,
     useColorModeValue,
+    Highlight,
 } from '@chakra-ui/react';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext';
@@ -33,8 +34,14 @@ export default function SimpleCard() {
             await signIn(email, password)
             navigate('/dashboard')
         } catch (e) {
-            setError(e.message)
-            console.log(error)
+            if (e.message === "Firebase: Error (auth/wrong-password).") {
+                setError("Password is incorrect. Please try again.");
+            } else if ("Firebase: Error (auth/user-not-found).") {
+                setError("Email does not exist. Please sign up.");
+            } else {
+                setError("Error: failed to login");
+            }
+            console.log(e.message);
         }
     };
     return (
@@ -42,22 +49,35 @@ export default function SimpleCard() {
             minH={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={useColorModeValue('gray.50', 'gray.800')}>
+            w={'full'}
+            backgroundImage={
+                'red_background.jpg'
+            }
+            backgroundSize={'cover'}
+            backgroundPosition={'center center'}>
             <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
                 <Stack align={'center'}>
                     <Image src="trainboard_full.png" w="300px" />
-                    <Heading fontSize={'4xl'}>Sign in to your account</Heading>
-                    <Text fontSize={'lg'} color={'gray.600'}>
-                        Start your journey <Link color={'red.400'}>today</Link>
+                    <Heading fontSize={'4xl'} color="white">Sign in to your account</Heading>
+                    <Text fontSize={'lg'} color={'red.400'}>
+                        Start your journey today
                     </Text>
+                    {error &&
+                        <Highlight
+                            query={error}
+                            styles={{ px: '2', py: '1', rounded: 'full', bg: 'red.300' }}
+                        >
+                            {error}
+                        </Highlight>
+                    }
                 </Stack>
                 <form p={8} onSubmit={handleSubmit}>
                     <Stack spacing={4}>
-                        <FormControl id="email" onChange={(e) => setEmail(e.target.value)}>
+                        <FormControl id="email" color="white" onChange={(e) => setEmail(e.target.value)}>
                             <FormLabel>Email address</FormLabel>
                             <Input type="email" />
                         </FormControl>
-                        <FormControl id="password" onChange={(e) => setPassword(e.target.value)}>
+                        <FormControl id="password" color="white" onChange={(e) => setPassword(e.target.value)}>
                             <FormLabel>Password</FormLabel>
                             <Input type="password" />
                         </FormControl>
@@ -65,9 +85,11 @@ export default function SimpleCard() {
                             <Stack
                                 direction={{ base: 'column', sm: 'row' }}
                                 align={'start'}
-                                justify={'space-between'}>
+                                justify={'space-between'}
+                                color="white"
+                            >
                                 <Checkbox>Remember me</Checkbox>
-                                <Link color={'red.400'}>Forgot password?</Link>
+                                <Link>Forgot password?</Link>
                             </Stack>
                             <Button
                                 type="submit"
@@ -79,7 +101,10 @@ export default function SimpleCard() {
                                 Sign in
                             </Button>
                         </Stack>
-                        <Text>Don't have an account? <Link color={'red.400'} to="/signup">Create one</Link></Text>
+                        <Text color="white">Don't have an account? <Link to="/signup" style={{ color: "#EB5F5F" }}>Create one</Link></Text>
+                        <Link to="/">
+                            <Text color="red.300">Go back home</Text>
+                        </Link>
                     </Stack>
                 </form>
             </Stack>
