@@ -1,7 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import './App.css';
-import Hero from './components/Hero';
 import Explore from './pages/Explore';
 import HomePage from './pages/Home';
 import SignUp from './pages/SignUp';
@@ -13,6 +12,8 @@ import Dashboard from './pages/Dashboard';
 import Favoriteworkouts from './pages/Favoriteworkouts';
 import Myworkouts from './pages/Myworkouts';
 
+import ProtectedRoute from './ProtectedRoute';
+
 function App() {
     return (
         <ChakraProvider>
@@ -22,15 +23,37 @@ function App() {
                         <Routes>
                             {/* Landing Page */}
                             <Route path="/" element={<HomePage />} />
+
                             {/* User Auth */}
                             <Route path="/signup" element={<SignUp />} />
                             <Route path="/signin" element={<SignIn />} />
-                            <Route path="/create" element={<WorkoutCreator />} />
+
                             {/* User Logged in */}
-                            <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/favoriteworkouts" element={<Favoriteworkouts />} />
-                            <Route path="/myworkouts" element={<Myworkouts />} />
-                            <Route path="/explore" element={<Explore />} />
+                            <Route path="/dashboard" element={
+                                <ProtectedRoute>
+                                    <Dashboard />
+                                </ProtectedRoute>} />
+                            <Route path="/favoriteworkouts" element={
+                                <ProtectedRoute>
+                                    <Favoriteworkouts />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/myworkouts" element={
+                                <ProtectedRoute>
+                                    <Myworkouts />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/explore" element={
+                                <ProtectedRoute>
+                                    <Explore />
+                                </ProtectedRoute>
+                            } />
+
+                            <Route path="/create" element={
+                                <ProtectedRoute>
+                                    <WorkoutCreator />
+                                </ProtectedRoute>
+                            }/>
                         </Routes>
                     </div>
                 </AuthProvider>
