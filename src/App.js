@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Explore from './pages/Explore';
 import HomePage from './pages/Home';
+import AboutUs from './pages/AboutUs';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 
@@ -24,6 +25,7 @@ function App() {
                         <Routes>
                             {/* Landing Page */}
                             <Route path="/" element={<HomePage />} />
+                            <Route path="/aboutus" element={<AboutUs />} />
 
                             {/* User Auth */}
                             <Route path="/signup" element={<SignUp />} />
