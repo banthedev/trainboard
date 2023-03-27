@@ -124,9 +124,10 @@ export default function Navbar() {
                                         py={1}
                                         rounded={'md'}
                                         color={'white'}
+                                        bg="red.500"
                                         _hover={{
                                             textDecoration: 'none',
-                                            bg: 'red.500'
+                                            bg: 'red.600'
                                         }}
                                         href="/signin"
                                     >
