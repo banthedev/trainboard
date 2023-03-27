@@ -1,4 +1,3 @@
-
 import {
     Flex,
     Box,
@@ -7,24 +6,24 @@ import {
     Input,
     Checkbox,
     Stack,
-    Link,
     Button,
     Heading,
     Text,
     useColorModeValue,
 } from '@chakra-ui/react';
 import Navbar from "../components/Navbar";
+import { Link } from 'react-router-dom';
 export default function SignIn() {
 
     return (
         <>
             <Navbar />
-            
+
             <Flex
                 minH={'100vh'}
                 align={'center'}
                 justify={'center'}
-                bg={useColorModeValue('rgba(20,20,20,0.6)')}>
+                bg={'white'}>
                 <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
                     <Stack align={'center'}>
                         <Heading fontSize={'4xl'}>Sign up for TrainBoard</Heading>
@@ -50,18 +49,19 @@ export default function SignIn() {
                                 <FormLabel>Password</FormLabel>
                                 <Input type="password" />
                             </FormControl>
+                            <FormControl id="confirmpassword">
+                                <FormLabel>Confirm Password</FormLabel>
+                                <Input type="confirmpassword" />
+                            </FormControl>
                             <Stack spacing={10}>
-                                <Stack
-                                    direction={{ base: 'column', sm: 'row' }}
-                                    align={'center'}
-                                    justify={'space-between'}>
-                                    <Link color={'blue.400'} to='/signin'>Already have an account? Sign in</Link>
-                                </Stack>
+                                <Link to='/signin'><Button direction={{ base: 'column', sm: 'row' }} align={'center'} justify={'space-between'}>
+                                    Already have an account? Sign in
+                                </Button></Link>
                                 <Button
-                                    bg={'blue.400'}
+                                    bg={'red.500'}
                                     color={'white'}
                                     _hover={{
-                                        bg: 'blue.500',
+                                        bg: 'red.600',
                                     }}>
                                     Sign Up
                                 </Button>
@@ -70,7 +70,7 @@ export default function SignIn() {
                     </Box>
                 </Stack>
             </Flex>
-            
+
         </>
     );
 }
