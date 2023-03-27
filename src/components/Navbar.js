@@ -3,7 +3,6 @@ import {
     Flex,
     Avatar,
     HStack,
-    Link,
     IconButton,
     Button,
     Menu,
@@ -15,11 +14,11 @@ import {
     useColorModeValue,
     Stack,
     Image,
+    Text
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { UserAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, Link } from 'react-router-dom';
 const Links = [
     {
         label: 'Home',
@@ -35,6 +34,21 @@ const Links = [
     }
 ];
 
+const AuthLinks = [
+    {
+        label: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        label: 'My Workouts',
+        href: '/myworkouts',
+    },
+    {
+        label: 'Explore',
+        href: '/explore',
+    }
+]
+
 export default function Navbar() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user, logout } = UserAuth();
@@ -49,7 +63,13 @@ export default function Navbar() {
             console.log(e.message);
         }
     }
-
+    
+    let userLinks = [];
+        if (user) {
+            userLinks = AuthLinks;
+        } else {
+            userLinks = Links;
+        }
     return (
         <>
             <Box bg={useColorModeValue('black', 'white')} px={4}>
@@ -78,21 +98,33 @@ export default function Navbar() {
                             as={'nav'}
                             spacing={4}
                             display={{ base: 'none', md: 'flex' }}>
-                            {Links.map((link) => (
-                                <Link
-                                    px={2}
-                                    py={1}
-                                    rounded={'md'}
-                                    color={'white'}
-                                    _hover={{
-                                        textDecoration: 'none',
-                                        bg: 'red.500'
-                                    }}
-                                    key={link.label}
-                                    href={link.href}>
-                                    {link.label}
+                            {userLinks.map((link) => (
+                                <Link to={link.href}>
+                                    <Text
+                                        px={2}
+                                        py={1}
+                                        rounded={'md'}
+                                        color={'white'}
+                                        _hover={{
+                                            textDecoration: 'none',
+                                            bg: 'red.500'
+                                        }}
+                                        key={link.label}>
+                                        {link.label}
+                                    </Text>
                                 </Link>
                             ))}
+                            {user &&
+                                <Link to="/create">
+                                    <Button
+                                        leftIcon={<PlusSquareIcon />}
+                                        size="sm"
+                                        colorScheme='red'
+                                    >
+                                        Create Workout
+                                    </Button>
+                                </Link>
+                            }
                         </HStack>
                     </HStack>
                     <Flex alignItems={'center'}>
@@ -119,7 +151,8 @@ export default function Navbar() {
                             </Menu>
                             :
                             <Menu>
-                                    <Link
+                                <Link to="/signin">
+                                    <Text
                                         px={2}
                                         py={1}
                                         rounded={'md'}
@@ -129,37 +162,39 @@ export default function Navbar() {
                                             textDecoration: 'none',
                                             bg: 'red.600'
                                         }}
-                                        href="/signin"
                                     >
                                         Login
-                                    </Link>
+                                    </Text>
+                                </Link>
                             </Menu>
                         }
+                    </Flex>
                 </Flex>
-            </Flex>
-
-            {isOpen ? (
-                <Box pb={4} display={{ md: 'none' }}>
-                    <Stack as={'nav'} spacing={4}>
-                        {Links.map((link) => (
-                            <Link
-                                px={2}
-                                py={1}
-                                rounded={'md'}
-                                color={'white'}
-                                _hover={{
-                                    textDecoration: 'none',
-                                    bg: 'red.500'
-                                }}
-                                key={link.label}
-                                href={link.href}>
-                                {link.label}
-                            </Link>
-                        ))}
-                    </Stack>
-                </Box>
-            ) : null}
-        </Box>
+                {/* Hamburger for smaller devices */}
+                {isOpen ? (
+                    <Box pb={4} display={{ md: 'none' }}>
+                        <Stack as={'nav'} spacing={4}>
+                            {userLinks.map((link) => (
+                                <Link to={link.href}>
+                                    <Text
+                                        px={2}
+                                        py={1}
+                                        rounded={'md'}
+                                        color={'white'}
+                                        _hover={{
+                                            textDecoration: 'none',
+                                            bg: 'red.500'
+                                        }}
+                                        key={link.label}
+                                        href={link.href}>
+                                        {link.label}
+                                    </Text>
+                                </Link>
+                            ))}
+                        </Stack>
+                    </Box>
+                ) : null}
+            </Box>
 
         </>
     );
