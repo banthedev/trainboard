@@ -10,6 +10,7 @@ import WorkoutCreator from './pages/WorkoutCreator';
 import Dashboard from './pages/Dashboard';
 import Favoriteworkouts from './pages/Favoriteworkouts';
 import Myworkouts from './pages/Myworkouts';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
     return (
@@ -27,6 +28,21 @@ function App() {
                         <Route path="/myworkouts" element={<Myworkouts />} />
                     </Routes>
                 </div>
+                <AuthProvider>
+                    <div className="App">
+                        <Routes>
+                            {/* Landing Page */}
+                            <Route path="/" element={<HomePage />} />
+                            {/* User Auth */}
+                            <Route path="/signup" element={<SignUp />} />
+                            <Route path="/signin" element={<SignIn />} />
+                            <Route path="/create" element={<WorkoutCreator />} />
+                            {/* User Logged in */}
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/explore" element={<Explore />} />
+                        </Routes>
+                    </div>
+                </AuthProvider>
             </BrowserRouter>
         </ChakraProvider>
     );
