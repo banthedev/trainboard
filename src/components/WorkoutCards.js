@@ -6,6 +6,7 @@ import {
     VStack,
     Button,
     Avatar,
+    Link
 } from '@chakra-ui/react';
 
 const users = [
@@ -95,9 +96,11 @@ function Cards({ workoutName, creator, labels }) {
                 </HStack>
 
                 <Box w="80%" pt={7}>
-                    <Button w="full" colorScheme="red" variant="outline">
-                        View Workout
-                    </Button>
+                    <Link href="/workoutview">
+                        <Button w="full" colorScheme="red" variant="outline">
+                            View Workout
+                        </Button>
+                    </Link>
                 </Box>
             </VStack>
 
