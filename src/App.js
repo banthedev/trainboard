@@ -11,6 +11,7 @@ import { AuthProvider } from './context/AuthContext';
 import Dashboard from './pages/Dashboard';
 import Favoriteworkouts from './pages/Favoriteworkouts';
 import Myworkouts from './pages/Myworkouts';
+import WorkoutView from './pages/WorkoutView';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -41,6 +42,11 @@ function App() {
                             <Route path="/myworkouts" element={
                                 <ProtectedRoute>
                                     <Myworkouts />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/workoutview" element={
+                                <ProtectedRoute>
+                                    <WorkoutView />
                                 </ProtectedRoute>
                             } />
                             <Route path="/explore" element={
