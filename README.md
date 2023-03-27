@@ -1,44 +1,24 @@
-# TrainBoard
 
+![trainboard_small](https://user-images.githubusercontent.com/68972382/228045944-ce7632e6-223c-41b3-ab84-b6c01dcd898c.png)
 
-## Developer environment setup 
+*"A workout planner that works for you!"*
 
-### 1. First fork the repository
-Click on the `fork` button as shown below
-<img width="1365" alt="image" src="https://user-images.githubusercontent.com/68972382/217399604-c9bdae23-d376-4b30-a011-385ed5c325e9.png">
+TrainBoard is a centralized platform to store, view, modify workouts created by you and other users. 
 
-### 2. Clone the your forked repository locally
-Copy the repository's HTTPS link
-<img width="1055" alt="image" src="https://user-images.githubusercontent.com/68972382/217400017-fa741674-a1f0-4b9f-ac70-eb984d9741d9.png">
+**Developers:**
+- Kyle Gaudet
+- Anderson Nouv
+- Shafaat Osmani
+- Bryan Montalvan
 
-Now open your terminal, and navigate to a directory where you would like to place the project.
+Check out our [wiki](https://github.com/bryanmontalvan/trainboard/wiki) for more information!
 
-Use the following command to clone the repository to your local system,
-```
-git clone <your forked repoistory's HTTPS link>
-```
-### 3. Install project dependacies
-
-Navigate to the project
-
-```shell
-cd trainboard
-```
-
-Install the node dependancies 
-
-```shell
-npm install
-```
-
-Note: We are assuming you have Node.js installed on your system (Download Node.js [here](https://nodejs.org/en/download/))
-
-### Running a local build of the website
-
-Use the following command to run a local build
-
-```shell
-npm run start
-```
-
-Now you should be able to interact with a local build
+Technologies used: 
+<br />
+<img alt="React" src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB"  height="25" />
+<img alt="Nodejs" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"  height="25" />
+<img alt="javacript" src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" height="25" />
+<img alt="firebase" src="https://img.shields.io/badge/firebase-ffca28?style=for-the-badge&logo=firebase&logoColor=black" height="25" />
+<img alt="chakra-ui" src="https://img.shields.io/badge/Chakra--UI-319795?style=for-the-badge&logo=chakra-ui&logoColor=white" height="25" /> 
+<img alt="vercel" src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" height="25" />     
+        
