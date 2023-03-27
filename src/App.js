@@ -7,6 +7,7 @@ import HomePage from './pages/Home';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 
+import WorkoutCreator from './pages/WorkoutCreator';
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/signup" element={<SignUp />} />
                         <Route path="/signin" element={<SignIn />} />
+                        <Route path="/create" element={<WorkoutCreator />} />
                     </Routes>
                 </div>
             </BrowserRouter>
