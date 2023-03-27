@@ -24,6 +24,10 @@ const Links = [
         href: '/',
     },
     {
+        label: 'Dashboard',
+        href:'/dashboard',
+    },
+    {
         label: 'Explore',
         href: '/explore',
     },

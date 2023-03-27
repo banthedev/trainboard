@@ -20,7 +20,7 @@ const categories = [
     }
 ];
 
-export default function Navbar() {
+export default function ExploreNav() {
 
     return (
         <>
