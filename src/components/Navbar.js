@@ -144,7 +144,7 @@ export default function Navbar() {
                                     />
                                 </MenuButton>
                                 <MenuList>
-                                    <MenuItem>Profile</MenuItem>
+                                    <Link to='/profile'><MenuItem>Profile</MenuItem></Link>
                                     <MenuDivider />
                                     <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
                                 </MenuList>
