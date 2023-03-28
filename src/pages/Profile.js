@@ -16,8 +16,13 @@ import {
     Button,
     useColorModeValue,
   } from '@chakra-ui/react';
+import { UserAuth } from "../context/AuthContext";
+
 
 export default function Explore() {
+
+    const { user } = UserAuth();
+    
     return (
         <div>
             <Background />
@@ -60,7 +65,7 @@ export default function Explore() {
             </ListItem>
             <ListItem>
               
-              Email: display here
+              Email: {user.email}
               <Button>Edit</Button>
             </ListItem>
           </List>
