@@ -65,6 +65,21 @@ export default function Explore() {
             </ListItem>
           </List>
 
+          <Link to='/changepassword'><Button
+            mt={10}
+            w={'full'}
+            bg={'gray.600'}
+            color={'white'}
+            rounded={'xl'}
+            boxShadow={'0 5px 20px 0px rgb(72 187 120 / 43%)'}
+            _hover={{
+              bg: 'gray.500',
+            }}
+            _focus={{
+              bg: 'gray.600',
+            }}>
+            Change Password
+          </Button></Link>
           <Link to='/deleteaccount'><Button
             mt={10}
             w={'full'}

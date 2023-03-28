@@ -14,6 +14,7 @@ import Myworkouts from './pages/Myworkouts';
 import WorkoutView from './pages/WorkoutView';
 import Profile from './pages/Profile';
 import DeleteAccount from './pages/DeleteAccount';
+import ChangePassword from './pages/ChangePassword';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -40,6 +41,11 @@ function App() {
                             <Route path="/profile" element={
                                 <ProtectedRoute>
                                     <Profile />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/changepassword" element={
+                                <ProtectedRoute>
+                                    <ChangePassword />
                                 </ProtectedRoute>
                             } />
                             <Route path="/deleteaccount" element={
