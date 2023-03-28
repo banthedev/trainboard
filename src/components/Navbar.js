@@ -25,12 +25,8 @@ const Links = [
         href: '/',
     },
     {
-        label: 'Explore',
-        href: '/explore',
-    },
-    {
-        label: 'Create',
-        href: '/create',
+        label: 'About Us',
+        href: '/aboutus',
     }
 ];
 
@@ -195,7 +191,6 @@ export default function Navbar() {
                     </Box>
                 ) : null}
             </Box>
-
         </>
     );
 }
