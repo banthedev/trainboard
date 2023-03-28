@@ -120,7 +120,7 @@ export default function WorkoutCards() {
                 {users.map((user) => (
                     <div class="workoutclass">
                         <style>
-                            {'.workoutclass {width:25%; height:20%}'}
+                            {'.workoutclass {width:30%; height:20%}'}
                         </style>
                         <Cards workoutName={user.workoutName} creator={user.creator} labels={user.labels} key={user.workoutName} />
                     </div>
