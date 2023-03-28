@@ -13,6 +13,9 @@ import Dashboard from './pages/Dashboard';
 import Favoriteworkouts from './pages/Favoriteworkouts';
 import Myworkouts from './pages/Myworkouts';
 import WorkoutView from './pages/WorkoutView';
+import Profile from './pages/Profile';
+import DeleteAccount from './pages/DeleteAccount';
+import ChangePassword from './pages/ChangePassword';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -35,7 +38,23 @@ function App() {
                             <Route path="/dashboard" element={
                                 <ProtectedRoute>
                                     <Dashboard />
-                                </ProtectedRoute>} />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/profile" element={
+                                <ProtectedRoute>
+                                    <Profile />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/changepassword" element={
+                                <ProtectedRoute>
+                                    <ChangePassword />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/deleteaccount" element={
+                                <ProtectedRoute>
+                                    <DeleteAccount />
+                                </ProtectedRoute>
+                            } />
                             <Route path="/favoriteworkouts" element={
                                 <ProtectedRoute>
                                     <Favoriteworkouts />
@@ -56,7 +75,6 @@ function App() {
                                     <Explore />
                                 </ProtectedRoute>
                             } />
-
                             <Route path="/create" element={
                                 <ProtectedRoute>
                                     <WorkoutCreator />
