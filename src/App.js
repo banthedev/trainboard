@@ -18,6 +18,7 @@ import DeleteAccount from './pages/DeleteAccount';
 import ChangePassword from './pages/ChangePassword';
 
 import ProtectedRoute from './ProtectedRoute';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
     return (
@@ -33,7 +34,7 @@ function App() {
                             {/* User Auth */}
                             <Route path="/signup" element={<SignUp />} />
                             <Route path="/signin" element={<SignIn />} />
-
+                            <Route path="forgot-password" element={<ResetPassword />} />
                             {/* User Logged in */}
                             <Route path="/dashboard" element={
                                 <ProtectedRoute>
