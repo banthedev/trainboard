@@ -34,7 +34,7 @@ function App() {
                             {/* User Auth */}
                             <Route path="/signup" element={<SignUp />} />
                             <Route path="/signin" element={<SignIn />} />
-                            <Route path="forgot-password" element={<ResetPassword />} />
+                            <Route path="/reset-password" element={<ResetPassword />} />
                             {/* User Logged in */}
                             <Route path="/dashboard" element={
                                 <ProtectedRoute>

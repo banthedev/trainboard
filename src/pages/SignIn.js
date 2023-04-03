@@ -89,7 +89,7 @@ export default function SimpleCard() {
                                 color="white"
                             >
                                 <Checkbox>Remember me</Checkbox>
-                                <Link to="/forgot-password">Forgot password?</Link>
+                                <Link to="/reset-password">Forgot password?</Link>
                             </Stack>
                             <Button
                                 type="submit"
