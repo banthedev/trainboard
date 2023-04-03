@@ -1,10 +1,7 @@
 //import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
 import Background from "../components/Background";
-import ExploreNav from "../components/ExploreNav";
-import WorkoutCards from "../components/WorkoutCards";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
     Box,
     Center,
@@ -12,17 +9,24 @@ import {
     Stack,
     List,
     ListItem,
-    ListIcon,
     Button,
     useColorModeValue,
   } from '@chakra-ui/react';
 import { UserAuth } from "../context/AuthContext";
-
+import { useState } from "react";
 
 export default function Explore() {
+    const [username, setUsername] = useState('');
+    const { user, getUsername } = UserAuth();
 
-    const { user } = UserAuth();
-    
+    async function getUser() {
+        const username = await getUsername(user);
+        setUsername(username);
+    }
+
+    // Potentially wrap in a useEffect
+    getUser();
+
     return (
         <div>
             <Background />
@@ -60,7 +64,7 @@ export default function Explore() {
           <List spacing={3}>
             <ListItem>
               
-              Username: display here
+              Username: {username}
               <Button>Edit</Button>
             </ListItem>
             <ListItem>
