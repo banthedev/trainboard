@@ -27,6 +27,9 @@ const users = [
     }
 ]
 
+// Query workouts from firebase
+
+
 var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'pink'];
 var textColors = ['black', 'white', 'white', 'black', 'black', 'black'];
 var muscles =["ARMS", "CHEST", "BACK", "LEGS", "SHOULDERS", "CARDIO"];
@@ -108,7 +111,7 @@ function Cards({ workoutName, creator, labels }) {
     )
 }
 
-export default function WorkoutCards() {
+export default function WorkoutCards(privateWorkouts) {
     return (
         <Box py={12}>
             <Stack

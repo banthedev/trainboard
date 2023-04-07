@@ -1,5 +1,6 @@
 import { database } from '../firebase';
-import { arrayUnion, arrayRemove, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, doc, getDoc, setDoc, updateDoc, collection } from 'firebase/firestore';
+
 export function addUserToCollection(uid, username, email) {
   return setDoc(doc(database, "users", uid), {
     username: username,
@@ -7,30 +8,31 @@ export function addUserToCollection(uid, username, email) {
   });
 };
 
-// Function for adding data to document 
-export function addAppToDocument(data, user) {
-  // Get reference to document
-  const docRef = doc(database, "users", user.uid);
-  return updateDoc(docRef, {
-    apps: arrayUnion(data)
-  });
+export function addWorkoutToDocument(user, data, isPrivate) {
+    let subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
+    const messageRef = doc(database, "users", user.uid, subcollectionName, data.workoutName);
+    return setDoc(messageRef, {
+      workoutName: data.workoutName,
+      isPrivate: data.isPrivate,
+      workoutExercises: [...data.exercises]
+    });
 }
+  
+  
 
-// Generic function for removing data from document
-export function removeAppFromDocument(data, user) {
-  // Get reference to document
-  const docRef = doc(database, "users", user.uid);
-  return updateDoc(docRef, {
-    // Delete item in array
-    apps: arrayRemove(data)
-  });
-}
+// export function removeWorkoutFromDocument(user, workoutId, isPrivate) {
+//   const subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
+//   const subcollectionRef = doc(database, "users", user.uid, subcollectionName);
+//   return updateDoc(subcollectionRef, {
+//     workouts: arrayRemove(workoutId)
+//   });
+// }
 
-export async function getUsername(user) {
-  const docRef = doc(database, "users", user.uid)
-  const docSnap = await getDoc(docRef);
+// export async function getUsername(user) {
+//   const docRef = doc(database, "users", user.uid)
+//   const docSnap = await getDoc(docRef);
 
-  if (docSnap.exists()) {
-    return docSnap.data().username;
-  }
-}
+//   if (docSnap.exists()) {
+//     return docSnap.data().username;
+//   }
+// }
