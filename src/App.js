@@ -13,8 +13,12 @@ import Dashboard from './pages/Dashboard';
 import Favoriteworkouts from './pages/Favoriteworkouts';
 import Myworkouts from './pages/Myworkouts';
 import WorkoutView from './pages/WorkoutView';
+import Profile from './pages/Profile';
+import DeleteAccount from './pages/DeleteAccount';
+import ChangePassword from './pages/ChangePassword';
 
 import ProtectedRoute from './ProtectedRoute';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
     return (
@@ -30,12 +34,28 @@ function App() {
                             {/* User Auth */}
                             <Route path="/signup" element={<SignUp />} />
                             <Route path="/signin" element={<SignIn />} />
-
+                            <Route path="/reset-password" element={<ResetPassword />} />
                             {/* User Logged in */}
                             <Route path="/dashboard" element={
                                 <ProtectedRoute>
                                     <Dashboard />
-                                </ProtectedRoute>} />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/profile" element={
+                                <ProtectedRoute>
+                                    <Profile />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/changepassword" element={
+                                <ProtectedRoute>
+                                    <ChangePassword />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="/deleteaccount" element={
+                                <ProtectedRoute>
+                                    <DeleteAccount />
+                                </ProtectedRoute>
+                            } />
                             <Route path="/favoriteworkouts" element={
                                 <ProtectedRoute>
                                     <Favoriteworkouts />
@@ -56,7 +76,6 @@ function App() {
                                     <Explore />
                                 </ProtectedRoute>
                             } />
-
                             <Route path="/create" element={
                                 <ProtectedRoute>
                                     <WorkoutCreator />

@@ -18,6 +18,7 @@ export default function SignUp() {
     // Error state
     const [error, setError] = useState('');
     // Email & Pass state
+    const [username, setUsername ] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmationPassword, setConfirmationPassword] = useState('');
@@ -26,7 +27,7 @@ export default function SignUp() {
 
     const navigate = useNavigate();
     // Create user hook
-    const { createUser } = UserAuth();
+    const { createUser, addUserToCollection } = UserAuth();
 
     async function handleSubmit(e) {
         // Prevent Page Reload
@@ -44,7 +45,8 @@ export default function SignUp() {
         try {
             setError('');
             setLoading(true);
-            await createUser(email, password);
+            const res = await createUser(email, password);
+            await addUserToCollection(res.user.uid, username, email);
             navigate('/dashboard')
         } catch (e) {
             setError("Error: failed to create an account");
@@ -82,6 +84,10 @@ export default function SignUp() {
                 <form onSubmit={handleSubmit}
                     p={8}>
                     <Stack spacing={4} color="white">
+                        <FormControl id="username" onChange={(e) => setUsername(e.target.value)} isRequired>
+                            <FormLabel>Username</FormLabel>
+                            <Input type="text" />
+                        </FormControl>
                         <FormControl id="email" onChange={(e) => setEmail(e.target.value)} isRequired>
                             <FormLabel>Email address</FormLabel>
                             <Input type="email" />
