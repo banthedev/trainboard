@@ -36,6 +36,10 @@ const AuthLinks = [
         href: '/dashboard',
     },
     {
+        label: 'Favorite Workouts',
+        href: '/favoriteworkouts',
+    },
+    {
         label: 'My Workouts',
         href: '/myworkouts',
     },
