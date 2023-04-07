@@ -38,6 +38,10 @@ export default function SignUp() {
             return setError("Error: passwords do not match");
         }
 
+        if (password.length <= 5) {
+            return setError("Error: password must be more than 5 characters");
+        }
+
         try {
             setError('');
             setLoading(true);
