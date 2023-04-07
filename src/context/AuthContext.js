@@ -7,6 +7,9 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth } from '../firebase';
+
+import { addAppToDocument, addUserToCollection, getUsername, removeAppFromDocument } from './StoreContext';
+
 const UserContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -43,14 +46,27 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  const provided_values = {
+    createUser,
+    user,
+    logout,
+    signIn,
+    resetPassword,
+    addUserToCollection,
+    addAppToDocument,
+    getUsername,
+    removeAppFromDocument,
+  }
+
   return (
     // Exposes functions into all components via the context provier
-    <UserContext.Provider value={{ createUser, user, logout, signIn, resetPassword }}>
+    <UserContext.Provider value={provided_values}>
       {/* Don't render until user */}
       {!loading && children}
     </UserContext.Provider>
   );
 };
+
 
 export const UserAuth = () => {
   return useContext(UserContext);
