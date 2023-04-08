@@ -66,11 +66,6 @@ function App() {
                                     <Myworkouts />
                                 </ProtectedRoute>
                             } />
-                            <Route path="/workoutview" element={
-                                <ProtectedRoute>
-                                    <WorkoutView />
-                                </ProtectedRoute>
-                            } />
                             <Route path="/explore" element={
                                 <ProtectedRoute>
                                     <Explore />
@@ -81,6 +76,14 @@ function App() {
                                     <WorkoutCreator />
                                 </ProtectedRoute>
                             }/>
+
+                            {/* Workouts */}
+                            <Route path="/workouts/:workoutId" element={
+                                <ProtectedRoute>
+                                    <WorkoutView />
+                                </ProtectedRoute>
+                            } 
+                            />
                         </Routes>
                     </div>
                 </AuthProvider>

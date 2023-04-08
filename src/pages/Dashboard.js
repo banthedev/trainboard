@@ -3,7 +3,7 @@ import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
 import { Heading, HStack, Box, Stack, Button } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
-import { collection, getDocs, query } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
 import { getUsername } from "../context/StoreContext";
@@ -22,11 +22,12 @@ export default function Dashboard() {
         async function fetchData() {
             const uid = getUserId();
             const privateQ = query(
-                collection(database, "users", uid, "Private Workouts")
+                collection(database, "users", uid, "Private Workouts"), orderBy("createdAt", "desc")
             );
             const publicQ = query(
-                collection(database, "users", uid, "Public Workouts")
+                collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
             );
+
             const privateSnapshot = getDocs(privateQ);
             const publicSnapshot = getDocs(publicQ);
             const [privateData, publicData] = await Promise.all([
@@ -48,14 +49,14 @@ export default function Dashboard() {
     useEffect(() => {
         const workouts = [...privateWorkouts, ...publicWorkouts];
         const uniqueWorkouts = workouts.filter((workout, index) => {
-            const exists = workouts.findIndex((w) => w.workoutName === workout.workoutName);
+            const exists = workouts.findIndex((w) => w.workoutId === workout.workoutId);
             return exists === index;
         });
-        setUserWorkouts(uniqueWorkouts);
+        // sort the workouts array by createdAt date in descending order
+        setUserWorkouts(uniqueWorkouts.slice(0, 4));
     }, [privateWorkouts, publicWorkouts]);
 
-
-    const recentWorkoutCards = userWorkouts.slice(0, 4).map((workout) => {
+    const recentWorkoutCards = userWorkouts.map((workout) => {
         return (
             <div style={{ width: "25%", height: "20%" }} key={workout.workoutName}>
                 <WorkoutCard
@@ -71,7 +72,7 @@ export default function Dashboard() {
     });
 
 
-    const userWorkoutCards = userWorkouts.slice(0, 4).map((workout) => {
+    const userWorkoutCards = userWorkouts.map((workout) => {
         return (
             <div style={{ width: "25%", height: "20%" }} key={workout.workoutName}>
                 <WorkoutCard
@@ -114,9 +115,11 @@ export default function Dashboard() {
                     <Heading as='h3' size='lg' float='left' color='white'>
                         Favorite Workouts
                     </Heading>
-                    <Button marginLeft='2%' paddingLeft='4px' paddingRight='4px' href='/favoriteworkouts' backgroundColor='white' fontWeight='bold'>
-                        More
-                    </Button>
+                    <Link to="/myworkouts">
+                        <Button marginLeft='2%' paddingLeft='4px' paddingRight='4px' href='/favoriteworkouts' backgroundColor='white' fontWeight='bold'>
+                            More
+                        </Button>
+                    </Link>
                 </HStack>
                 <Box py={12}>
                     <Stack
@@ -133,9 +136,11 @@ export default function Dashboard() {
                     <Heading as='h3' size='lg' float='left' color='white' >
                         My Workouts
                     </Heading>
-                    <Button marginLeft='2%' paddingLeft='4px' paddingRight='4px' href='/myworkouts' backgroundColor='white' fontWeight='bold'>
-                        More
-                    </Button>
+                    <Link to="/myworkouts">
+                        <Button marginLeft='2%' paddingLeft='4px' paddingRight='4px' href='/myworkouts' backgroundColor='white' fontWeight='bold'>
+                            More
+                        </Button>
+                    </Link>
                 </HStack>
                 <Box py={12}>
                     <Stack

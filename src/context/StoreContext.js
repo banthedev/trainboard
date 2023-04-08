@@ -8,6 +8,8 @@ export function addUserToCollection(uid, username, email) {
   });
 };
 
+
+
 export async function addWorkoutToDocument(user, data, isPrivate) {
     let subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
     const messageRef = doc(database, "users", user.uid, subcollectionName, data.workoutName);
@@ -15,7 +17,7 @@ export async function addWorkoutToDocument(user, data, isPrivate) {
     const name = await getUsername(user);
     const randomId = makeid(20);
     const currentTime = Timestamp.now();
-
+    addWorkoutToMain(name, data.workoutName, randomId, isPrivate, currentTime, data.exercises);
     return setDoc(messageRef, {
       creator: name,
       workoutName: data.workoutName,
@@ -24,6 +26,18 @@ export async function addWorkoutToDocument(user, data, isPrivate) {
       createdAt: currentTime,
       favorite: false,
       workoutExercises: [...data.exercises],
+    });
+}
+
+export function addWorkoutToMain(uid, workoutName, randomId, isPrivate, currentTime, exercises) {
+    return setDoc(doc(database, "workouts", randomId), {
+        creator: uid,
+        workoutName: workoutName,
+        workoutId: randomId,
+        isPrivate: isPrivate,
+        createdAt: currentTime,
+        favorite: false,
+        workoutExercises: [...exercises],
     });
 }
 

@@ -5,7 +5,7 @@ import WorkoutCard from "../components/WorkoutCards";
 import MyWorkoutsDropdown from "../components/MyWorkoutsDropdown";
 import { HStack, Heading, Stack } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
-import { collection, getDocs, query } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
 import { getUsername } from "../context/StoreContext";
@@ -23,10 +23,10 @@ export default function Myworkouts() {
         async function fetchData() {
             const uid = getUserId();
             const privateQ = query(
-                collection(database, "users", uid, "Private Workouts")
+                collection(database, "users", uid, "Private Workouts"), orderBy("createdAt", "desc")
             );
             const publicQ = query(
-                collection(database, "users", uid, "Public Workouts")
+                collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
             );
             const privateSnapshot = getDocs(privateQ);
             const publicSnapshot = getDocs(publicQ);
@@ -58,14 +58,16 @@ export default function Myworkouts() {
     const userWorkoutCards = userWorkouts.map((workout) => {
         return (
             <div key={workout.workoutName}>
-              <WorkoutCard
-                key={workout.workoutName}
-                workoutName={workout.workoutName}
-                creator={userName}
-                isPrivate={workout.isPrivate}
-              />
+                <WorkoutCard
+                    key={workout.workoutName}
+                    workoutName={workout.workoutName}
+                    creator={userName}
+                    isPrivate={workout.isPrivate}
+                    workoutId={workout.workoutId}
+                    createdAt={workout.createdAt}
+                />
             </div>
-          );
+        );
     });
 
     return (
