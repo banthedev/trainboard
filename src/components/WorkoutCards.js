@@ -1,37 +1,17 @@
 import {
     Box,
-    Stack,
+    Tag,
     HStack,
     Text,
     VStack,
     Button,
     Avatar,
-    Link
 } from '@chakra-ui/react';
-
-const users = [
-    {
-        workoutName: "Arm Shredder",
-        creator: "Rich P",
-        labels: ["0"]
-    },
-    {
-        workoutName: "Back Day #5",
-        creator: "Chris Bumsteed",
-        labels: ["2", "4"]
-    },
-    {
-        workoutName: "Shoulder day",
-        creator: "Big Boi",
-        labels: ["4"]
-    }
-]
+import { Link } from 'react-router-dom';
 
 var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'pink'];
 var textColors = ['black', 'white', 'white', 'black', 'black', 'black'];
-var muscles =["ARMS", "CHEST", "BACK", "LEGS", "SHOULDERS", "CARDIO"];
-
-
+var muscles = ["ARMS", "CHEST", "BACK", "LEGS", "SHOULDERS", "CARDIO"];
 
 function WorkoutWrapper({ children }) {
     return (
@@ -49,7 +29,9 @@ function WorkoutWrapper({ children }) {
     );
 }
 
-function Cards({ workoutName, creator, labels }) {
+export default function WorkoutCard({ workoutName, creator, isPrivate, workoutId, createdAt }) {
+    const date = createdAt.toDate().toDateString();
+
     return (
         <WorkoutWrapper>
             <Box py={4} px={12}>
@@ -64,8 +46,6 @@ function Cards({ workoutName, creator, labels }) {
                         {creator}
                     </Text>
 
-                    {// creator profile button
-                    }
                     <Button
                         as={Button}
                         rounded={'full'}
@@ -85,18 +65,23 @@ function Cards({ workoutName, creator, labels }) {
             {/* Portion for labels */}
             <VStack
                 bg={'white'}
-                py={4}
+                py={1}
                 borderBottomRadius={'xl'}>
-                <HStack spacing={3} textAlign="center" px={12}>
-                    {labels.map((label) => (
-                            <text style={{backgroundColor:colors[label], color:textColors[label], borderRadius:20, padding:5}} >
-                                {muscles[label]}
-                            </text>
-                    ))}
-                </HStack>
+                <p><b>Created:</b><br />{date} </p>
 
-                <Box w="80%" pt={7}>
-                    <Link href="/workoutview">
+                <HStack spacing={3} textAlign="center" px={12} pt={3} >
+                    {isPrivate ?
+                        <Tag size="md" variant='subtle' colorScheme='red'>
+                            Private
+                        </Tag>
+                        :
+                        <Tag size="md" variant='subtle' colorScheme='cyan'>
+                            Public
+                        </Tag>
+                    }
+                </HStack>
+                <Box w="80%" pt={3} pb={3}>
+                    <Link to={`/workouts/${workoutId}`}>
                         <Button w="full" colorScheme="red" variant="outline">
                             View Workout
                         </Button>
@@ -106,26 +91,4 @@ function Cards({ workoutName, creator, labels }) {
 
         </WorkoutWrapper>
     )
-}
-
-export default function WorkoutCards() {
-    return (
-        <Box py={12}>
-            <Stack
-                direction={{ base: 'column', md: 'row' }}
-                textAlign="center"
-                justify="center"
-                spacing={{ base: 4, lg: 10 }}
-                py={10}>
-                {users.map((user) => (
-                    <div class="workoutclass">
-                        <style>
-                            {'.workoutclass {width:25%; height:20%}'}
-                        </style>
-                        <Cards workoutName={user.workoutName} creator={user.creator} labels={user.labels} key={user.workoutName} />
-                    </div>
-                ))}
-            </Stack>
-        </Box>
-    );
 }

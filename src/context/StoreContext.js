@@ -1,5 +1,6 @@
 import { database } from '../firebase';
-import { arrayUnion, arrayRemove, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, doc, getDoc, setDoc, updateDoc, collection, Timestamp } from 'firebase/firestore';
+
 export function addUserToCollection(uid, username, email) {
   return setDoc(doc(database, "users", uid), {
     username: username,
@@ -7,23 +8,49 @@ export function addUserToCollection(uid, username, email) {
   });
 };
 
-// Function for adding data to document 
-export function addAppToDocument(data, user) {
-  // Get reference to document
-  const docRef = doc(database, "users", user.uid);
-  return updateDoc(docRef, {
-    apps: arrayUnion(data)
-  });
+
+
+export async function addWorkoutToDocument(user, data, isPrivate) {
+    let subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
+    const messageRef = doc(database, "users", user.uid, subcollectionName, data.workoutName);
+
+    const name = await getUsername(user);
+    const randomId = makeid(20);
+    const currentTime = Timestamp.now();
+    addWorkoutToMain(name, data.workoutName, randomId, isPrivate, currentTime, data.exercises);
+    return setDoc(messageRef, {
+      creator: name,
+      workoutName: data.workoutName,
+      workoutId: randomId,
+      isPrivate: isPrivate,
+      createdAt: currentTime,
+      favorite: false,
+      workoutExercises: [...data.exercises],
+    });
 }
 
-// Generic function for removing data from document
-export function removeAppFromDocument(data, user) {
-  // Get reference to document
-  const docRef = doc(database, "users", user.uid);
-  return updateDoc(docRef, {
-    // Delete item in array
-    apps: arrayRemove(data)
-  });
+export function addWorkoutToMain(uid, workoutName, randomId, isPrivate, currentTime, exercises) {
+    return setDoc(doc(database, "workouts", randomId), {
+        creator: uid,
+        workoutName: workoutName,
+        workoutId: randomId,
+        isPrivate: isPrivate,
+        createdAt: currentTime,
+        favorite: false,
+        workoutExercises: [...exercises],
+    });
+}
+
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
 }
 
 export async function getUsername(user) {

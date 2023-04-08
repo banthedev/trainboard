@@ -2,44 +2,62 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
     TableContainer,
-  } from '@chakra-ui/react'
+    Editable,
+    EditablePreview,
+    EditableInput
+} from '@chakra-ui/react';
 
-export default function WorkoutTable() {
+
+export default function WorkoutTable({ exercises, onExerciseChange }) {
+    const columns = ["Exercise", "Sets", "Reps"];
+
+    const handleCellChange = (value, rowIndex, colIndex) => {
+        const newExercises = exercises.map((exercise, i) => {
+            if (i === rowIndex) {
+                return {
+                    ...exercise,
+                    [Object.keys(exercise)[colIndex]]: value,
+                };
+            }
+            return exercise;
+        });
+        onExerciseChange(newExercises);
+    };
+
     return (
         <TableContainer>
-            <Table variant='simple'>
+            <Table variant="simple">
                 <Thead>
-                <Tr>
-                    <Th>Exercise</Th>
-                    <Th>Sets</Th>
-                    <Th>Reps</Th>
-                </Tr>
+                    <Tr>
+                        {columns.map((col) => (
+                            <Th key={col}>{col}</Th>
+                        ))}
+                    </Tr>
                 </Thead>
                 <Tbody>
-                <Tr>
-                    <Td>dummy text</Td>
-                    <Td>dummy text</Td>
-                    <Td>dummy text</Td>
-                </Tr>
-                <Tr>
-                    <Td>dummy text</Td>
-                    <Td>dummy text</Td>
-                    <Td>dummy text</Td>
-                </Tr>
-                <Tr>
-                    <Td>dummy text</Td>
-                    <Td>dummy text</Td>
-                    <Td>dummy text</Td>
-                </Tr>
+                    {exercises.map((exercise, rowIndex) => (
+                        <Tr key={rowIndex}>
+                            {Object.values(exercise).map((cell, colIndex) => (
+                                <Td key={`${rowIndex}-${colIndex}`}>
+                                    <Editable
+                                        value={cell}
+                                        onChange={(value) =>
+                                            handleCellChange(value, rowIndex, colIndex)
+                                        }
+                                    >
+                                        <EditablePreview />
+                                        <EditableInput />
+                                    </Editable>
+                                </Td>
+                            ))}
+                        </Tr>
+                    ))}
                 </Tbody>
             </Table>
         </TableContainer>
-    )
-
-} 
+    );
+}

@@ -8,7 +8,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '../firebase';
 
-import { addAppToDocument, addUserToCollection, getUsername, removeAppFromDocument } from './StoreContext';
+import { addWorkoutToDocument, addUserToCollection } from './StoreContext';
 
 const UserContext = createContext();
 
@@ -36,6 +36,10 @@ export const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   }
 
+  function getUserId() {
+    return user.uid;
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -53,13 +57,14 @@ export const AuthProvider = ({ children }) => {
     signIn,
     resetPassword,
     addUserToCollection,
-    addAppToDocument,
-    getUsername,
-    removeAppFromDocument,
+    addWorkoutToDocument,
+    getUserId
+    // getUsername,
+    // removeWorkoutFromDocument,
   }
 
   return (
-    // Exposes functions into all components via the context provier
+    // Exposes functions into all components via the context provider
     <UserContext.Provider value={provided_values}>
       {/* Don't render until user */}
       {!loading && children}
