@@ -9,7 +9,6 @@ import {
     VStack
 } from '@chakra-ui/react';
 
-{/* class to store necessary info about workout */}
 class workout {
         workoutName="Arm Shredder";
         creator="Rich P";

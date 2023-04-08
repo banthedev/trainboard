@@ -1,5 +1,5 @@
 import { database } from '../firebase';
-import { arrayRemove, doc, getDoc, setDoc, updateDoc, collection } from 'firebase/firestore';
+import { arrayRemove, doc, getDoc, setDoc, updateDoc, collection, Timestamp } from 'firebase/firestore';
 
 export function addUserToCollection(uid, username, email) {
   return setDoc(doc(database, "users", uid), {
@@ -8,31 +8,42 @@ export function addUserToCollection(uid, username, email) {
   });
 };
 
-export function addWorkoutToDocument(user, data, isPrivate) {
+export async function addWorkoutToDocument(user, data, isPrivate) {
     let subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
     const messageRef = doc(database, "users", user.uid, subcollectionName, data.workoutName);
+
+    const name = await getUsername(user);
+    const randomId = makeid(20);
+    const currentTime = Timestamp.now();
+
     return setDoc(messageRef, {
+      creator: name,
       workoutName: data.workoutName,
-      isPrivate: data.isPrivate,
-      workoutExercises: [...data.exercises]
+      workoutId: randomId,
+      isPrivate: isPrivate,
+      createdAt: currentTime,
+      favorite: false,
+      workoutExercises: [...data.exercises],
     });
 }
-  
-  
 
-// export function removeWorkoutFromDocument(user, workoutId, isPrivate) {
-//   const subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
-//   const subcollectionRef = doc(database, "users", user.uid, subcollectionName);
-//   return updateDoc(subcollectionRef, {
-//     workouts: arrayRemove(workoutId)
-//   });
-// }
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
 
-// export async function getUsername(user) {
-//   const docRef = doc(database, "users", user.uid)
-//   const docSnap = await getDoc(docRef);
+export async function getUsername(user) {
+  const docRef = doc(database, "users", user.uid)
+  const docSnap = await getDoc(docRef);
 
-//   if (docSnap.exists()) {
-//     return docSnap.data().username;
-//   }
-// }
+  if (docSnap.exists()) {
+    return docSnap.data().username;
+  }
+}

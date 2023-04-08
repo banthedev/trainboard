@@ -59,13 +59,13 @@ export default function Navbar() {
             console.log(e.message);
         }
     }
-    
+
     let userLinks = [];
-        if (user) {
-            userLinks = AuthLinks;
-        } else {
-            userLinks = Links;
-        }
+    if (user) {
+        userLinks = AuthLinks;
+    } else {
+        userLinks = Links;
+    }
     return (
         <>
             <Box bg={useColorModeValue('black', 'white')} px={4}>
@@ -95,7 +95,9 @@ export default function Navbar() {
                             spacing={4}
                             display={{ base: 'none', md: 'flex' }}>
                             {userLinks.map((link) => (
-                                <Link to={link.href}>
+                                <Link to={link.href}
+                                    key={link.label}
+                                >
                                     <Text
                                         px={2}
                                         py={1}
@@ -105,7 +107,7 @@ export default function Navbar() {
                                             textDecoration: 'none',
                                             bg: 'red.500'
                                         }}
-                                        key={link.label}>
+                                    >
                                         {link.label}
                                     </Text>
                                 </Link>

@@ -7,30 +7,29 @@ import {
     EditableInput,
     Button,
     Checkbox,
+    Alert,
+    AlertIcon
 } from "@chakra-ui/react";
+// React & React Router
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+// Firebase
 import { addWorkoutToDocument } from "../context/StoreContext";
 import { UserAuth } from "../context/AuthContext";
+
+
 export default function WorkoutCreator() {
     const [workoutName, setWorkoutName] = useState('Workout #1');
-    const [isPrivate, setIsPrivate] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(true);
     const [exercises, setExercises] = useState([
         {
-            exerciseName: "Bicep Curl",
-            sets: "3",
-            reps: "10"
-        },
-        {
-            exerciseName: "Tricep Extension",
-            sets: "3",
-            reps: "10"
-        },
-        {
-            exerciseName: "Shoulder Press",
-            sets: "3",
-            reps: "8"
+            exerciseName: "Change Me",
+            sets: "0",
+            reps: "0"
         },
     ]);
+    const [saved, setSaved] = useState(false);
+    const navigate = useNavigate();
 
     const handleWorkoutName = (e) => {
         setWorkoutName(e.target.value);
@@ -38,7 +37,6 @@ export default function WorkoutCreator() {
 
     const handleAddExercise = () => {
         setExercises([...exercises, { exerciseName: "Exercise", sets: "0", reps: "0" }]);
-        console.log(exercises);
     };
 
     const handleExerciseChange = (newExercises) => {
@@ -46,10 +44,13 @@ export default function WorkoutCreator() {
     };
 
     const handleCheckboxChange = (e) => {
-        setIsPrivate(e.target.checked);
-    };      
+        if (e.target.checked) {
+            setIsPrivate(false);
+        }
+    };
 
     const { user } = UserAuth();
+
 
     async function handleSaveWorkout() {
         const workout = {
@@ -57,13 +58,29 @@ export default function WorkoutCreator() {
             exercises: exercises,
             isPrivate: isPrivate,
         };
-        await addWorkoutToDocument(user, workout, isPrivate);
+        // Try to add workout to document
+        try {
+            await addWorkoutToDocument(user, workout, isPrivate);
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+        setSaved(true);
+        setTimeout(() => {
+            navigate('/dashboard')
+        }, 2000);
     };
 
     return (
         <div>
             <Background />
             <Navbar />
+            {saved &&
+                <Alert status='success'>
+                    <AlertIcon />
+                    Workout Saved! Redirecting...
+                </Alert>
+            }
             <div style={{ backgroundColor: "white", width: "90%", display: "inline-block", marginTop: "1%" }}>
                 <Editable defaultValue='Workout #1' fontSize="2xl">
                     <EditablePreview />
