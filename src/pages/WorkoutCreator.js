@@ -1,6 +1,14 @@
+// React & React Router
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+// Firebase
+import { addWorkoutToDocument } from "../context/StoreContext";
+import { UserAuth } from "../context/AuthContext";
+// Component imports
 import Navbar from "../components/Navbar";
 import Background from "../components/Background";
 import WorkoutTable from "../components/WorkoutTable";
+// Chakra Imports
 import {
     Editable,
     EditablePreview,
@@ -10,13 +18,6 @@ import {
     Alert,
     AlertIcon
 } from "@chakra-ui/react";
-// React & React Router
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-// Firebase
-import { addWorkoutToDocument } from "../context/StoreContext";
-import { UserAuth } from "../context/AuthContext";
-
 
 export default function WorkoutCreator() {
     const [workoutName, setWorkoutName] = useState('Workout #1');
@@ -68,7 +69,7 @@ export default function WorkoutCreator() {
         setSaved(true);
         setTimeout(() => {
             navigate('/dashboard')
-        }, 2000);
+        }, 1000);
     };
 
     return (

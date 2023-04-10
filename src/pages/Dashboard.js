@@ -61,6 +61,7 @@ export default function Dashboard() {
             <div key={workout.workoutName}>
                 <WorkoutCard
                     key={workout.workoutName}
+                    user={user}
                     workoutName={workout.workoutName}
                     creator={userName}
                     isPrivate={workout.isPrivate}
@@ -77,6 +78,7 @@ export default function Dashboard() {
             <div key={workout.workoutName}>
                 <WorkoutCard
                     key={workout.workoutName}
+                    user={user}
                     workoutName={workout.workoutName}
                     creator={userName}
                     isPrivate={workout.isPrivate}

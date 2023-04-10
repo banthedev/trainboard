@@ -5,37 +5,63 @@ import {
     Text,
     VStack,
     Button,
-    Avatar,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    IconButton
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { HamburgerIcon, ExternalLinkIcon, DeleteIcon } from '@chakra-ui/icons';
+import { useState } from 'react';
+import { deleteWorkoutFromCollecton } from '../context/StoreContext';
 
 var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'pink'];
 var textColors = ['black', 'white', 'white', 'black', 'black', 'black'];
 var muscles = ["ARMS", "CHEST", "BACK", "LEGS", "SHOULDERS", "CARDIO"];
 
-function WorkoutWrapper({ children }) {
-    return (
-        <Box
-            mb={4}
-            shadow="base"
-            borderWidth="1px"
-            alignSelf={{ base: 'center', lg: 'flex-start' }}
-            borderColor={'black'}
-            borderRadius={'xl'}
-            backgroundColor={'white'}
-            borderBottom={' "3px solid black'}>
-            {children}
-        </Box>
-    );
+function WorkoutWrapper({ children, wasDeleted }) {
+    if (!wasDeleted) {
+        return (
+            <Box
+                mb={4}
+                shadow="base"
+                borderWidth="1px"
+                alignSelf={{ base: 'center', lg: 'flex-start' }}
+                borderColor={'black'}
+                borderRadius={'xl'}
+                backgroundColor={'white'}
+                borderBottom={' "3px solid black'}>
+                {children}
+            </Box>
+        );
+    } else {
+        return null;
+    }
 }
 
-export default function WorkoutCard({ workoutName, creator, isPrivate, workoutId, createdAt }) {
+export default function WorkoutCard({ user, workoutName, creator, isPrivate, workoutId, createdAt }) {
+    // React State
+    const [wasDeleted, setWasDeleted] = useState(false);
+    // Convert Date to String
     const date = createdAt.toDate().toDateString();
 
+    // Delete Workout
+    async function handleDeleteWorkout() {
+        try {
+            await deleteWorkoutFromCollecton(user, workoutName, isPrivate);
+            setWasDeleted(true);
+        } catch (error) {
+            console.log("Unable to delete workout: " + error);
+        }
+    }
+
+    // Get workout link
+    const workoutLink = `https://trainboard.vercel.app/workouts/${workoutId}`;
+
     return (
-        <WorkoutWrapper >
+        <WorkoutWrapper wasDeleted={wasDeleted}>
             <Box py={4} px={12}>
-                {/* Workout Name */}
                 <Text fontWeight="500" fontSize="xl">
                     {workoutName}
                 </Text>
@@ -43,23 +69,26 @@ export default function WorkoutCard({ workoutName, creator, isPrivate, workoutId
                 {/* Workout Creator */}
                 <HStack justifyContent="center">
                     <Text fontSize="l" fontWeight="600">
-                        {creator}
+                        @{creator}
                     </Text>
-
-                    <Button
-                        as={Button}
-                        rounded={'full'}
-                        variant={'link'}
-                        cursor={'pointer'}
-                        minW={0}>
-                        <Avatar
-                            size={'sm'}
-                            src={
-                                'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                            }
-                        />
-                    </Button>
                 </HStack>
+                {/* Workout Properties Menu */}
+                <Menu>
+                    <MenuButton
+                        as={IconButton}
+                        aria-label='Options'
+                        icon={<HamburgerIcon />}
+                        variant='outline'
+                    />
+                    <MenuList>
+                        <MenuItem icon={<ExternalLinkIcon />} onClick={() => { navigator.clipboard.writeText(workoutLink) }}>
+                            Share Workout
+                        </MenuItem>
+                        <MenuItem icon={<DeleteIcon />} onClick={handleDeleteWorkout}>
+                            Delete Workout
+                        </MenuItem>
+                    </MenuList>
+                </Menu>
             </Box>
 
             {/* Portion for labels */}
@@ -88,7 +117,6 @@ export default function WorkoutCard({ workoutName, creator, isPrivate, workoutId
                     </Link>
                 </Box>
             </VStack>
-
         </WorkoutWrapper>
     )
 }
