@@ -108,11 +108,12 @@ export default function Dashboard() {
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
                         justify="center"
-                        margin="auto"
+                        marginLeft="30px"
+                        marginRight="30px"
                         py={12}
                         style={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(4, minmax(350px, 350px))',
+                            gridTemplateColumns: 'repeat(4, minmax(200px, 350px))',
                             gridGap: '30px',
                         }} >
                         {recentWorkoutCards}
@@ -135,11 +136,12 @@ export default function Dashboard() {
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
                         justify="center"
-                        margin="auto"
+                        marginLeft="30px"
+                        marginRight="30px"
                         py={12}
                         style={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(4, minmax(350px, 350px))',
+                            gridTemplateColumns: 'repeat(4, minmax(200px, 350px))',
                             gridGap: '30px',
                         }} >
                         {/*publicWorkoutCards*/}
@@ -162,11 +164,12 @@ export default function Dashboard() {
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
                         justify="center"
-                        margin="auto"
+                        marginLeft="30px"
+                        marginRight="30px"
                         py={12}
                         style={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(4, minmax(350px, 350px))',
+                            gridTemplateColumns: 'repeat(4, minmax(200px, 350px))',
                             gridGap: '30px',
                         }} >
                         {userWorkoutCards}
