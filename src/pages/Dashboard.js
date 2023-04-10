@@ -58,7 +58,7 @@ export default function Dashboard() {
 
     const recentWorkoutCards = userWorkouts.map((workout) => {
         return (
-            <div style={{ width: "25%", height: "20%" }} key={workout.workoutName}>
+            <div key={workout.workoutName}>
                 <WorkoutCard
                     key={workout.workoutName}
                     workoutName={workout.workoutName}
@@ -74,7 +74,7 @@ export default function Dashboard() {
 
     const userWorkoutCards = userWorkouts.map((workout) => {
         return (
-            <div style={{ width: "25%", height: "20%" }} key={workout.workoutName}>
+            <div key={workout.workoutName}>
                 <WorkoutCard
                     key={workout.workoutName}
                     workoutName={workout.workoutName}
@@ -96,17 +96,23 @@ export default function Dashboard() {
                     {'#dashboardcontentdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; }'}
                 </style>
 
-                <Heading as='h3' size='lg' float='left' marginLeft='5%' marginTop='2%' color='white' >
-                    Recent Workouts
-                </Heading>
-                <br></br>
-                <Box py={12}>
+                <HStack>
+                    <Heading as='h3' size='lg' float='left' marginLeft='5%' marginTop='2%' color='white' >
+                        Recent Workouts
+                    </Heading>
+                </HStack>
+                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
                         justify="center"
-                        spacing={{ base: 4, lg: 10 }}
-                        py={10}>
+                        margin="auto"
+                        py={12}
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(4, minmax(350px, 350px))',
+                            gridGap: '30px',
+                        }} >
                         {recentWorkoutCards}
                     </Stack>
                 </Box>
@@ -121,14 +127,20 @@ export default function Dashboard() {
                         </Button>
                     </Link>
                 </HStack>
-                <Box py={12}>
+
+                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
                         justify="center"
-                        spacing={{ base: 4, lg: 10 }}
-                        py={10}>
-                        {/* {publicWorkoutCards} */}
+                        margin="auto"
+                        py={12}
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(4, minmax(350px, 350px))',
+                            gridGap: '30px',
+                        }} >
+                        {/*publicWorkoutCards*/}
                     </Stack>
                 </Box>
 
@@ -142,16 +154,23 @@ export default function Dashboard() {
                         </Button>
                     </Link>
                 </HStack>
-                <Box py={12}>
+
+                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
                         justify="center"
-                        spacing={{ base: 4, lg: 10 }}
-                        py={10}>
+                        margin="auto"
+                        py={12}
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(4, minmax(350px, 350px))',
+                            gridGap: '30px',
+                        }} >
                         {userWorkoutCards}
                     </Stack>
                 </Box>
+
             </div>
         </div>
     )

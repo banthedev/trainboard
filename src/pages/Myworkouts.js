@@ -3,7 +3,7 @@ import Searchbar from "../components/Searchbar";
 import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
 import MyWorkoutsDropdown from "../components/MyWorkoutsDropdown";
-import { HStack, Heading, Stack } from '@chakra-ui/react'
+import { HStack, Heading, Stack,Box } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import { database } from "../firebase";
@@ -57,7 +57,7 @@ export default function Myworkouts() {
 
     const userWorkoutCards = userWorkouts.map((workout) => {
         return (
-            <div key={workout.workoutName}>
+            <div  key={workout.workoutName}>
                 <WorkoutCard
                     key={workout.workoutName}
                     workoutName={workout.workoutName}
@@ -88,20 +88,21 @@ export default function Myworkouts() {
                         My Workouts
                     </Heading>
                 </HStack>
-                <Stack
-                    direction={{ base: 'column', md: 'row' }}
-                    textAlign="center"
-                    justify="center"
-                    spacing={{ base: 4, lg: 10 }}
-                    py={10}
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                        gridGap: '20px',
-                    }}
-                >
-                    {userWorkoutCards}
-                </Stack>
+                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
+                    <Stack
+                        direction={{ base: 'column', md: 'row' }}
+                        textAlign="center"
+                        justify="center"
+                        margin="auto"
+                        py={12}
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(4, minmax(350px, 350px))',
+                            gridGap: '30px',
+                        }} >
+                        {userWorkoutCards}
+                    </Stack>
+                </Box>
             </div>
         </div>
     )

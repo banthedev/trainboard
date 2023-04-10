@@ -33,7 +33,7 @@ export default function WorkoutCard({ workoutName, creator, isPrivate, workoutId
     const date = createdAt.toDate().toDateString();
 
     return (
-        <WorkoutWrapper>
+        <WorkoutWrapper >
             <Box py={4} px={12}>
                 {/* Workout Name */}
                 <Text fontWeight="500" fontSize="xl">
