@@ -61,8 +61,9 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
 
     return (
         <WorkoutWrapper wasDeleted={wasDeleted}>
-            <Box py={4} px={12}>
-                <Text fontWeight="500" fontSize="xl">
+            <Box py={"4px"} >
+
+                <Text fontWeight="500" fontSize="xl" >
                     {workoutName}
                 </Text>
 
