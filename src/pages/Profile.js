@@ -2,6 +2,7 @@
 import Navbar from "../components/Navbar";
 import Background from "../components/Background";
 import { Link } from 'react-router-dom';
+import { useState } from "react";
 import {
     Box,
     Center,
@@ -13,11 +14,10 @@ import {
     useColorModeValue,
   } from '@chakra-ui/react';
 import { UserAuth } from "../context/AuthContext";
-import { useState } from "react";
-
+import { getUsername } from "../context/StoreContext";
 export default function Explore() {
     const [username, setUsername] = useState('');
-    const { user, getUsername } = UserAuth();
+    const { user } = UserAuth();
 
     async function getUser() {
         const username = await getUsername(user);
