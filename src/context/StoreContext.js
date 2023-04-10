@@ -1,11 +1,11 @@
 import { database } from '../firebase';
-import { arrayRemove, doc, getDoc, setDoc, updateDoc, collection, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, Timestamp } from 'firebase/firestore';
 
 export function addUserToCollection(uid, username, email) {
-  return setDoc(doc(database, "users", uid), {
-    username: username,
-    email: email,
-  });
+    return setDoc(doc(database, "users", uid), {
+        username: username,
+        email: email,
+    });
 };
 
 
@@ -19,13 +19,13 @@ export async function addWorkoutToDocument(user, data, isPrivate) {
     const currentTime = Timestamp.now();
     addWorkoutToMain(name, data.workoutName, randomId, isPrivate, currentTime, data.exercises);
     return setDoc(messageRef, {
-      creator: name,
-      workoutName: data.workoutName,
-      workoutId: randomId,
-      isPrivate: isPrivate,
-      createdAt: currentTime,
-      favorite: false,
-      workoutExercises: [...data.exercises],
+        creator: name,
+        workoutName: data.workoutName,
+        workoutId: randomId,
+        isPrivate: isPrivate,
+        createdAt: currentTime,
+        favorite: false,
+        workoutExercises: [...data.exercises],
     });
 }
 
@@ -47,17 +47,34 @@ function makeid(length) {
     const charactersLength = characters.length;
     let counter = 0;
     while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
     }
     return result;
 }
 
 export async function getUsername(user) {
-  const docRef = doc(database, "users", user.uid)
-  const docSnap = await getDoc(docRef);
+    const docRef = doc(database, "users", user.uid)
+    const docSnap = await getDoc(docRef);
 
-  if (docSnap.exists()) {
-    return docSnap.data().username;
-  }
+    if (docSnap.exists()) {
+        return docSnap.data().username;
+    }
+}
+
+// Delete workout from user's collection
+export async function deleteWorkoutFromCollecton(user, workoutName, isPrivate) {
+    try {
+        // Delete workout from user's (private or public) collection
+        let subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
+        const userCollectionRef = doc(database, "users", user.uid, subcollectionName, workoutName);
+        await deleteDoc(userCollectionRef);
+        // Delete workout from main collection
+        const mainCollectionRef = doc(database, "workouts", workoutName);
+        await deleteDoc(mainCollectionRef);
+        return true;
+    } catch (error) {
+        console.error("Error deleting workout: ", error);
+        return false;
+    }
 }
