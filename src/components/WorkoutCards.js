@@ -12,7 +12,7 @@ import {
     IconButton
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { HamburgerIcon, ExternalLinkIcon, DeleteIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, ExternalLinkIcon, DeleteIcon, StarIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { deleteWorkoutFromCollecton } from '../context/StoreContext';
 
@@ -40,12 +40,12 @@ function WorkoutWrapper({ children, wasDeleted }) {
     }
 }
 
-export default function WorkoutCard({ user, workoutName, creator, isPrivate, workoutId, createdAt }) {
+export default function WorkoutCard({ user, workoutName, creator, isPrivate, workoutId, createdAt, isFavorite }) {
     // React State
     const [wasDeleted, setWasDeleted] = useState(false);
+    const [isFavorited, setIsFavorited] = useState(isFavorite);
     // Convert Date to String
     const date = createdAt.toDate().toDateString();
-
     // Delete Workout
     async function handleDeleteWorkout() {
         try {
@@ -62,7 +62,6 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
     return (
         <WorkoutWrapper wasDeleted={wasDeleted}>
             <Box py={"4px"} >
-
                 <Text fontWeight="500" fontSize="xl" >
                     {workoutName}
                 </Text>
@@ -90,6 +89,11 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
                         </MenuItem>
                     </MenuList>
                 </Menu>
+                { isFavorited ?
+                <StarIcon w={8} h={8} color="yellow.400" />
+                :
+                <StarIcon w={8} h={8} color="gray.600" />
+            }
             </Box>
 
             {/* Portion for labels */}

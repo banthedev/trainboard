@@ -67,11 +67,11 @@ export default function Dashboard() {
                     isPrivate={workout.isPrivate}
                     workoutId={workout.workoutId}
                     createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
                 />
             </div>
         )
     });
-
 
     const userWorkoutCards = userWorkouts.map((workout) => {
         return (
@@ -84,6 +84,7 @@ export default function Dashboard() {
                     isPrivate={workout.isPrivate}
                     workoutId={workout.workoutId}
                     createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
                 />
             </div>
         )
