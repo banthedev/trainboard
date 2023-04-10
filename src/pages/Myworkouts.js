@@ -60,6 +60,7 @@ export default function Myworkouts() {
             <div  key={workout.workoutName}>
                 <WorkoutCard
                     key={workout.workoutName}
+                    user={user}
                     workoutName={workout.workoutName}
                     creator={userName}
                     isPrivate={workout.isPrivate}
