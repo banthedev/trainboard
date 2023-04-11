@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
+import ExploreWorkoutCard from "../components/ExploreWorkoutCards";
 import { Heading, HStack, Box, Stack, Button } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy, where, doc, onSnapshot } from 'firebase/firestore'
@@ -113,20 +114,38 @@ export default function Dashboard() {
     });
 
     const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
-        return (
-            <div key={workout.workoutName}>
-                <WorkoutCard
-                    key={workout.workoutName}
-                    user={user}
-                    workoutName={workout.workoutName}
-                    creator={userName}
-                    isPrivate={workout.isPrivate}
-                    workoutId={workout.workoutId}
-                    createdAt={workout.createdAt}
-                    isFavorite={workout.favorite}
-                />
-            </div>
-        )
+        console.log(workout.creator, userName)
+        if (workout.creator !== userName) {
+            return (
+                <div key={workout.workoutName}>
+                    <ExploreWorkoutCard
+                        key={workout.workoutName}
+                        user={user}
+                        workoutName={workout.workoutName}
+                        creator={workout.creator}
+                        isPrivate={workout.isPrivate}
+                        workoutId={workout.workoutId}
+                        createdAt={workout.createdAt}
+                        isFavorite={workout.favorite}
+                    />
+                </div>
+            )
+        } else {
+            return (
+                <div key={workout.workoutName}>
+                    <WorkoutCard
+                        key={workout.workoutName}
+                        user={user}
+                        workoutName={workout.workoutName}
+                        creator={userName}
+                        isPrivate={workout.isPrivate}
+                        workoutId={workout.workoutId}
+                        createdAt={workout.createdAt}
+                        isFavorite={workout.favorite}
+                    />
+                </div>
+            );
+        }
     });
 
     return (

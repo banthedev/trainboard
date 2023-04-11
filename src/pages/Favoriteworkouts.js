@@ -7,6 +7,7 @@ import { UserAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import { getUsername } from "../context/StoreContext";
 import WorkoutCard from "../components/WorkoutCards";
+import ExploreWorkoutCard from "../components/ExploreWorkoutCards";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { database } from "../firebase";
 export default function Favoriteworkouts() {
@@ -54,20 +55,38 @@ export default function Favoriteworkouts() {
 
 
     const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
-        return (
-            <div key={workout.workoutName}>
-                <WorkoutCard
-                    key={workout.workoutName}
-                    user={user}
-                    workoutName={workout.workoutName}
-                    creator={userName}
-                    isPrivate={workout.isPrivate}
-                    workoutId={workout.workoutId}
-                    createdAt={workout.createdAt}
-                    isFavorite={workout.favorite}
-                />
-            </div>
-        );
+        console.log(workout.creator, userName)
+        if (workout.creator !== userName) {
+            return (
+                <div key={workout.workoutName}>
+                    <ExploreWorkoutCard
+                        key={workout.workoutName}
+                        user={user}
+                        workoutName={workout.workoutName}
+                        creator={userName}
+                        isPrivate={workout.isPrivate}
+                        workoutId={workout.workoutId}
+                        createdAt={workout.createdAt}
+                        isFavorite={workout.favorite}
+                    />
+                </div>
+            )
+        } else {
+            return (
+                <div key={workout.workoutName}>
+                    <WorkoutCard
+                        key={workout.workoutName}
+                        user={user}
+                        workoutName={workout.workoutName}
+                        creator={userName}
+                        isPrivate={workout.isPrivate}
+                        workoutId={workout.workoutId}
+                        createdAt={workout.createdAt}
+                        isFavorite={workout.favorite}
+                    />
+                </div>
+            );
+        }
     });
 
     return (
