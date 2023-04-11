@@ -46,15 +46,12 @@ export default function ExploreWorkoutCard({ user, workoutName, creator, isPriva
         try {
             setIsFavorited(!isFavorited);
             if (!isFavorited) {
-                console.log("Workout is favorited")
                 await addFavoriteWorkoutToUserDocument(user, workoutId);
             } else {
-                console.log("Workout unfavorited")
                 await removeFavoriteWorkoutFromUserDocument(user, workoutId);
             }
-            await updateFavoriteWorkout(user, workoutName, workoutId, isPrivate, !(isFavorited));
         } catch (error) {
-            console.log("Unable to favorite workout: " + error);
+            console.error("Unable to favorite workout: " + error);
         }
     }
 

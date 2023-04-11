@@ -64,7 +64,7 @@ export default function WorkoutCreator() {
         try {
             await addWorkoutToDocument(user, workout, isPrivate);
         } catch (error) {
-            console.log(error);
+            console.error(error);
             return;
         }
         setSaved(true);

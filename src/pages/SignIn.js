@@ -41,7 +41,7 @@ export default function SimpleCard() {
             } else {
                 setError("Error: failed to login");
             }
-            console.log(e.message);
+            console.error(e.message);
         }
     };
     return (

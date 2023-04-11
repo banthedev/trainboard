@@ -36,7 +36,7 @@ export default function SelfFeedbackBar({ workoutName, workoutId, isPrivate, isF
                 navigate('/dashboard');
             }, 2000);
         } catch (error) {
-            console.log("Unable to delete workout: " + error);
+            console.error("Unable to delete workout: " + error);
         }
     }
     
@@ -45,15 +45,13 @@ export default function SelfFeedbackBar({ workoutName, workoutId, isPrivate, isF
         try {
             setIsFavorited(!isFavorited);
             if (!isFavorited) {
-                console.log("Workout is favorited")
                 await addFavoriteWorkoutToUserDocument(user, workoutId);
             } else {
-                console.log("Workout unfavorited")
                 await removeFavoriteWorkoutFromUserDocument(user, workoutId);
             }
             await updateFavoriteWorkout(user, workoutName, workoutId, isPrivate, !(isFavorited));
         } catch (error) {
-            console.log("Unable to favorite workout: " + error);
+            console.error("Unable to favorite workout: " + error);
         }
     }
 

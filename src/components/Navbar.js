@@ -58,9 +58,9 @@ export default function Navbar() {
         try {
             await logout();
             navigate('/');
-            console.log("You are logged out")
+            console.error("You are logged out")
         } catch (e) {
-            console.log(e.message);
+            console.error(e.message);
         }
     }
 

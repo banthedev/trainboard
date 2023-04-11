@@ -151,6 +151,7 @@ export async function getUserFavoritedWorkouts(user) {
 export async function getFavoritedWorkoutsFromCollection(user) {
     try {
         const favoritedWorkouts = await getUserFavoritedWorkouts(user);
+        if (favoritedWorkouts.length === 0) throw ('No favoriteded workouts');
         const workoutsRef = collection(database, 'workouts');
         const workoutsQuery = query(workoutsRef, where('workoutId', 'in', favoritedWorkouts));
         const querySnapshot = await getDocs(workoutsQuery);
@@ -160,6 +161,7 @@ export async function getFavoritedWorkoutsFromCollection(user) {
         console.error('Error in getFavoritedWorkoutsFromCollection: ', error);
         throw error;
     }
+
 }
 
 export async function deleteUserDocument(user) {
