@@ -5,6 +5,7 @@ import Background from "../components/Background";
 import ExploreNav from "../components/ExploreNav";
 import WorkoutCards from "../components/WorkoutCards";
 import { Link, useNavigate } from 'react-router-dom';
+import { UserAuth } from "../context/AuthContext";
 import {
     Box,
     Center,
@@ -21,10 +22,17 @@ import {
     Button,
     Heading,
     Highlight,
-    Stack,
+    Stack
 } from '@chakra-ui/react';
-
+import { deleteUserDocument } from "../context/StoreContext";
 export default function Explore() {
+    const navigate = useNavigate();
+    const {user, deleteAccount} = UserAuth(); 
+    async function handleDeleteAccount() {
+        await deleteAccount();
+        navigate("/");
+        deleteUserDocument(user); 
+    }
     return (
         <div>
             <Background />
@@ -53,19 +61,19 @@ export default function Explore() {
                                 DELETE ACCOUNT
                             </Text>
                             <Text fontSize={'xl'} fontWeight={800}>
-                                Please enter your password to permanently delete your account
+                                Please enter your username to permanently delete your account
                             </Text>
                         </Stack>
                     </Stack>
                     {/*ADD EDIT FUNCTIONALITY TO BUTTONS*/}
                     <Box bg={useColorModeValue('gray.50', 'gray.900')} px={6} py={10}>
-                        <FormControl id="delete_password">
-                            <FormLabel>Password</FormLabel>
-                            <Input type="password" />
+                        <FormControl>
+                            <FormLabel>Username</FormLabel>
+                            <Input type="username" />
                         </FormControl>
-                        <FormControl id="delete_password_confirmation">
-                            <FormLabel>Confirm Password</FormLabel>
-                            <Input type="password" />
+                        <FormControl>
+                            <FormLabel>Confirm Username</FormLabel>
+                            <Input type="username" />
                         </FormControl>
 
                         <Link to='/profile'><Button
@@ -85,7 +93,8 @@ export default function Explore() {
                         </Button></Link>
 
                             {/*LINK THIS TO LANDING PAGE ONCE ACCOUNT IS DELETED*/}
-                        <Link to='/deleteaccount'><Button
+                        <Button
+                            onClick={handleDeleteAccount}
                             mt={10}
                             w={'full'}
                             bg={'red.600'}
@@ -99,7 +108,7 @@ export default function Explore() {
                                 bg: 'red.600',
                             }}>
                             Delete account
-                        </Button></Link>
+                        </Button>
                     </Box>
                 </Box>
             </Center>

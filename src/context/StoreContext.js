@@ -161,3 +161,7 @@ export async function getFavoritedWorkoutsFromCollection(user) {
         throw error;
     }
 }
+
+export async function deleteUserDocument(user) {
+    await deleteDoc(doc(database, "users", user.uid));
+}
