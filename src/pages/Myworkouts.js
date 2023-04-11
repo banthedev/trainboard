@@ -66,6 +66,7 @@ export default function Myworkouts() {
                     isPrivate={workout.isPrivate}
                     workoutId={workout.workoutId}
                     createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
                 />
             </div>
         );

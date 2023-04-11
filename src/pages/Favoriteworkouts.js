@@ -10,55 +10,48 @@ import WorkoutCard from "../components/WorkoutCards";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { database } from "../firebase";
 export default function Favoriteworkouts() {
-    // Auth
     const { user, getUserId } = UserAuth();
-    // State
     const [privateWorkouts, setPrivateWorkouts] = useState([]);
     const [publicWorkouts, setPublicWorkouts] = useState([]);
     const [userWorkouts, setUserWorkouts] = useState([]);
     const [userName, setUserName] = useState("");
     const [favoriteWorkouts, setFavoriteWorkouts] = useState([]);
 
+    // Fetches all workouts from the database
     useEffect(() => {
-        async function fetchData() {
+        async function fetchWorkouts() {
             const uid = getUserId();
             const privateQ = query(
-                collection(database, "users", uid, "Private Workouts"), orderBy("createdAt", "desc")
+                collection(database, "users", uid, "Private Workouts"),
+                orderBy("createdAt", "desc")
             );
             const publicQ = query(
-                collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
+                collection(database, "users", uid, "Public Workouts"),
+                orderBy("createdAt", "desc")
             );
-            const privateSnapshot = getDocs(privateQ);
-            const publicSnapshot = getDocs(publicQ);
             const [privateData, publicData] = await Promise.all([
-                privateSnapshot.then((querySnapshot) => {
-                    return querySnapshot.docs.map((doc) => doc.data());
-                }),
-                publicSnapshot.then((querySnapshot) => {
-                    return querySnapshot.docs.map((doc) => doc.data());
-                }),
+                getDocs(privateQ).then((querySnapshot) => querySnapshot.docs.map((doc) => doc.data())),
+                getDocs(publicQ).then((querySnapshot) => querySnapshot.docs.map((doc) => doc.data())),
             ]);
             setPrivateWorkouts(privateData);
             setPublicWorkouts(publicData);
             const name = await getUsername(user);
             setUserName(name);
         }
-        fetchData();
-    }, [user]);
+        fetchWorkouts();
+    }, [user, getUserId]);
 
     useEffect(() => {
         const workouts = [...privateWorkouts, ...publicWorkouts];
-        const uniqueWorkouts = workouts.filter((workout, index) => {
-            const exists = workouts.findIndex((w) => w.workoutName === workout.workoutName);
-            return exists === index;
-        });
+        const uniqueWorkouts = [...new Map(workouts.map((workout) => [workout.workoutName, workout])).values()];
         setUserWorkouts(uniqueWorkouts);
     }, [privateWorkouts, publicWorkouts]);
 
     useEffect(() => {
-        const favoriteWorkouts = userWorkouts.filter(workout => workout.favorite);
+        const favoriteWorkouts = userWorkouts.filter((workout) => workout.favorite);
         setFavoriteWorkouts(favoriteWorkouts);
     }, [userWorkouts]);
+
 
     const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
         return (

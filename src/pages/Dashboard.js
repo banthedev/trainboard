@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy, where } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
-import { getUsername, getUserFavoritedWorkouts } from "../context/StoreContext";
+import { getUsername, getFavoritedWorkoutsFromCollection } from "../context/StoreContext";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
@@ -17,6 +17,7 @@ export default function Dashboard() {
     const [publicWorkouts, setPublicWorkouts] = useState([]);
     const [userWorkouts, setUserWorkouts] = useState([]);
     const [userName, setUserName] = useState("");
+    const [favoriteWorkouts, setFavoriteWorkouts] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -28,68 +29,36 @@ export default function Dashboard() {
                 collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
             );
 
-            const privateSnapshot = getDocs(privateQ);
-            const publicSnapshot = getDocs(publicQ);
-            const [privateData, publicData] = await Promise.all([
-                privateSnapshot.then((querySnapshot) => {
-                    return querySnapshot.docs.map((doc) => doc.data());
-                }),
-                publicSnapshot.then((querySnapshot) => {
-                    return querySnapshot.docs.map((doc) => doc.data());
-                }),
+            const [privateSnapshot, publicSnapshot] = await Promise.all([
+                getDocs(privateQ),
+                getDocs(publicQ),
             ]);
+            const privateData = privateSnapshot.docs.map((doc) => doc.data());
+            const publicData = publicSnapshot.docs.map((doc) => doc.data());
+
+            // Set Private & Public Workouts to state
             setPrivateWorkouts(privateData);
             setPublicWorkouts(publicData);
+
+            // Get username
             const name = await getUsername(user);
             setUserName(name);
+
+            // Get favorited workouts
+            const favWorkouts = await getFavoritedWorkoutsFromCollection(user);
+            setFavoriteWorkouts(favWorkouts);
         }
         fetchData();
     }, [user]);
 
+    // Combine private and public workouts into one array
     useEffect(() => {
         const workouts = [...privateWorkouts, ...publicWorkouts];
-        const uniqueWorkouts = workouts.filter((workout, index) => {
-            const exists = workouts.findIndex((w) => w.workoutId === workout.workoutId);
-            return exists === index;
-        });
-        // sort the workouts array by createdAt date in descending order
+        const uniqueWorkouts = Array.from(new Set(workouts.map((workout) => workout.workoutId)))
+            .map((workoutId) => workouts.find((workout) => workout.workoutId === workoutId));
         setUserWorkouts(uniqueWorkouts.slice(0, 4));
     }, [privateWorkouts, publicWorkouts]);
 
-    const favoritedWorkouts = getUserFavoritedWorkouts(user);
-
-    const [favoritedWorkoutData, setFavoritedWorkoutData] = useState([]);
-
-    useEffect(() => {
-        async function fetchFavoritedWorkouts() {
-            const favoritedWorkoutIds = favoritedWorkouts.map((workout) => workout.workoutId);
-            const workoutQuery = query(collection(database, "workouts"), where("workoutId", "in", favoritedWorkoutIds));
-            const workoutSnapshot = await getDocs(workoutQuery);
-            const workoutData = workoutSnapshot.docs.map((doc) => doc.data());
-            setFavoritedWorkoutData(workoutData);
-
-        }
-        if (favoritedWorkouts.length > 0) {
-            fetchFavoritedWorkouts();
-        }
-    }, [favoritedWorkouts]);
-
-    const favoritedWorkoutCards = favoritedWorkoutData.map((workout) => {
-        return (
-            <div key={workout.workoutId}>
-                <WorkoutCard
-                    key={workout.workoutId}
-                    user={user}
-                    workoutName={workout.workoutName}
-                    creator={workout.creatorName}
-                    isPrivate={workout.isPrivate}
-                    workoutId={workout.workoutId}
-                    createdAt={workout.createdAt}
-                    isFavorite={true}
-                />
-            </div>
-        )
-    });
     const recentWorkoutCards = userWorkouts.map((workout) => {
         return (
             <div key={workout.workoutName}>
@@ -108,6 +77,23 @@ export default function Dashboard() {
     });
 
     const userWorkoutCards = userWorkouts.map((workout) => {
+        return (
+            <div key={workout.workoutName}>
+                <WorkoutCard
+                    key={workout.workoutName}
+                    user={user}
+                    workoutName={workout.workoutName}
+                    creator={userName}
+                    isPrivate={workout.isPrivate}
+                    workoutId={workout.workoutId}
+                    createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
+                />
+            </div>
+        )
+    });
+
+    const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
         return (
             <div key={workout.workoutName}>
                 <WorkoutCard
@@ -179,7 +165,7 @@ export default function Dashboard() {
                             gridTemplateColumns: 'repeat(4, minmax(200px, 350px))',
                             gridGap: '30px',
                         }} >
-                        {favoritedWorkoutCards}
+                        {favoriteWorkoutCards}
                     </Stack>
                 </Box>
 

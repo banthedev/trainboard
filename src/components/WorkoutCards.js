@@ -16,7 +16,7 @@ import { HamburgerIcon, ExternalLinkIcon, DeleteIcon, StarIcon } from '@chakra-u
 import { useState } from 'react';
 import { deleteWorkoutFromCollecton } from '../context/StoreContext';
 import { useNavigate } from 'react-router-dom';
-import { updateFavoriteWorkout, addFavoriteWorkoutToUserDocument } from '../context/StoreContext';
+import { updateFavoriteWorkout, addFavoriteWorkoutToUserDocument, removeFavoriteWorkoutFromUserDocument } from '../context/StoreContext';
 
 var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'pink'];
 var textColors = ['black', 'white', 'white', 'black', 'black', 'black'];
@@ -66,8 +66,14 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
     async function handleFavoriteWorkout() {
         try {
             setIsFavorited(!isFavorited);
-            await updateFavoriteWorkout(user, workoutName, isPrivate, !(isFavorited));
-            await addFavoriteWorkoutToUserDocument(user, workoutId);
+            if (!isFavorited) {
+                console.log("Workout is favorited")
+                await addFavoriteWorkoutToUserDocument(user, workoutId);
+            } else {
+                console.log("Workout unfavorited")
+                await removeFavoriteWorkoutFromUserDocument(user, workoutId);
+            }
+            await updateFavoriteWorkout(user, workoutName, workoutId, isPrivate, !(isFavorited));
         } catch (error) {
             console.log("Unable to favorite workout: " + error);
         }
