@@ -3,7 +3,7 @@ import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
 import { Heading, HStack, Box, Stack, Button } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy, where } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy, where, doc, onSnapshot } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
 import { getUsername, getFavoritedWorkoutsFromCollection } from "../context/StoreContext";
@@ -19,16 +19,16 @@ export default function Dashboard() {
     const [userName, setUserName] = useState("");
     const [favoriteWorkouts, setFavoriteWorkouts] = useState([]);
 
+    const uid = getUserId();
+    const privateQ = query(
+        collection(database, "users", uid, "Private Workouts"), orderBy("createdAt", "desc")
+    );
+    const publicQ = query(
+        collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
+    );
+
     useEffect(() => {
         async function fetchData() {
-            const uid = getUserId();
-            const privateQ = query(
-                collection(database, "users", uid, "Private Workouts"), orderBy("createdAt", "desc")
-            );
-            const publicQ = query(
-                collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
-            );
-
             const [privateSnapshot, publicSnapshot] = await Promise.all([
                 getDocs(privateQ),
                 getDocs(publicQ),
@@ -50,6 +50,25 @@ export default function Dashboard() {
         }
         fetchData();
     }, [user]);
+
+    useEffect(() => {
+        const unsubscribePrivate = onSnapshot(privateQ, (snapshot) => {
+            const data = snapshot.docs.map((doc) => doc.data());
+            setPrivateWorkouts(data);
+        });
+
+        const unsubscribePublic = onSnapshot(publicQ, (snapshot) => {
+            const data = snapshot.docs.map((doc) => doc.data());
+            setPublicWorkouts(data);
+        });
+
+        return () => {
+            unsubscribePrivate();
+            unsubscribePublic();
+        };
+    }, [getUserId]);
+
+
 
     // Combine private and public workouts into one array
     useEffect(() => {

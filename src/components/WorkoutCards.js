@@ -15,7 +15,6 @@ import { Link } from 'react-router-dom';
 import { HamburgerIcon, ExternalLinkIcon, DeleteIcon, StarIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { deleteWorkoutFromCollecton } from '../context/StoreContext';
-import { useNavigate } from 'react-router-dom';
 import { updateFavoriteWorkout, addFavoriteWorkoutToUserDocument, removeFavoriteWorkoutFromUserDocument } from '../context/StoreContext';
 
 var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'pink'];
@@ -49,15 +48,10 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
     // Convert Date to String
     const date = createdAt.toDate().toDateString();
     // Delete Workout
-    const navigate = useNavigate();
     async function handleDeleteWorkout() {
         try {
             await deleteWorkoutFromCollecton(user, workoutName, isPrivate);
             setWasDeleted(true);
-            setTimeout(() => {
-                //navigate('/dashboard');
-                window.location.reload();
-            }, 100);
         } catch (error) {
             console.log("Unable to delete workout: " + error);
         }
@@ -87,9 +81,9 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
             <Box py={"4px"} >
                 <HStack justifyContent="center">
                     {isFavorited ?
-                        <StarIcon w={8} h={8} color="yellow.400" onClick={handleFavoriteWorkout}/>
+                        <StarIcon w={4} h={8} color="yellow.400" onClick={handleFavoriteWorkout} />
                         :
-                        <StarIcon w={8} h={8} color="gray.600" onClick={handleFavoriteWorkout}/>
+                        <StarIcon w={4} h={8} color="gray.900" onClick={handleFavoriteWorkout} />
                     }
                     <Text fontWeight="500" fontSize="xl" >
                         {workoutName}
