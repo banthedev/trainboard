@@ -27,7 +27,7 @@ export default function Dashboard() {
     const publicQ = query(
         collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
     );
-
+    
     useEffect(() => {
         async function fetchData() {
             const [privateSnapshot, publicSnapshot] = await Promise.all([
@@ -68,8 +68,6 @@ export default function Dashboard() {
             unsubscribePublic();
         };
     }, [getUserId]);
-
-
 
     // Combine private and public workouts into one array
     useEffect(() => {
@@ -114,7 +112,6 @@ export default function Dashboard() {
     });
 
     const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
-        console.log(workout.creator, userName)
         if (workout.creator !== userName) {
             return (
                 <div key={workout.workoutName}>
@@ -126,7 +123,7 @@ export default function Dashboard() {
                         isPrivate={workout.isPrivate}
                         workoutId={workout.workoutId}
                         createdAt={workout.createdAt}
-                        isFavorite={workout.favorite}
+                        isFavorite={true}
                     />
                 </div>
             )
@@ -141,7 +138,7 @@ export default function Dashboard() {
                         isPrivate={workout.isPrivate}
                         workoutId={workout.workoutId}
                         createdAt={workout.createdAt}
-                        isFavorite={workout.favorite}
+                        isFavorite={true}
                     />
                 </div>
             );

@@ -1,15 +1,15 @@
+import { useEffect, useState } from "react";
+import { HStack, Heading, Box, Stack } from '@chakra-ui/react'
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { database } from "../firebase";
+import { UserAuth } from "../context/AuthContext";
+import { getUsername, getFavoritedWorkoutsFromCollection } from "../context/StoreContext";
 import Navbar from "../components/Navbar";
 import Searchbar from "../components/Searchbar";
 import Background from "../components/Background";
 import FavoritesDropdown from "../components/FavoritesDropdown";
-import { HStack, Heading, Box, Stack } from '@chakra-ui/react'
-import { UserAuth } from "../context/AuthContext";
-import { useEffect, useState } from "react";
-import { getUsername } from "../context/StoreContext";
 import WorkoutCard from "../components/WorkoutCards";
 import ExploreWorkoutCard from "../components/ExploreWorkoutCards";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { database } from "../firebase";
 export default function Favoriteworkouts() {
     const { user, getUserId } = UserAuth();
     const [privateWorkouts, setPrivateWorkouts] = useState([]);
@@ -34,10 +34,15 @@ export default function Favoriteworkouts() {
                 getDocs(privateQ).then((querySnapshot) => querySnapshot.docs.map((doc) => doc.data())),
                 getDocs(publicQ).then((querySnapshot) => querySnapshot.docs.map((doc) => doc.data())),
             ]);
+            // Set Public and Private Workouts to state
             setPrivateWorkouts(privateData);
             setPublicWorkouts(publicData);
+            // Get username
             const name = await getUsername(user);
             setUserName(name);
+            // Get Favorite workouts
+            const favWorkouts = await getFavoritedWorkoutsFromCollection(user);
+            setFavoriteWorkouts(favWorkouts);
         }
         fetchWorkouts();
     }, [user, getUserId]);
@@ -48,14 +53,7 @@ export default function Favoriteworkouts() {
         setUserWorkouts(uniqueWorkouts);
     }, [privateWorkouts, publicWorkouts]);
 
-    useEffect(() => {
-        const favoriteWorkouts = userWorkouts.filter((workout) => workout.favorite);
-        setFavoriteWorkouts(favoriteWorkouts);
-    }, [userWorkouts]);
-
-
     const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
-        console.log(workout.creator, userName)
         if (workout.creator !== userName) {
             return (
                 <div key={workout.workoutName}>
@@ -63,11 +61,11 @@ export default function Favoriteworkouts() {
                         key={workout.workoutName}
                         user={user}
                         workoutName={workout.workoutName}
-                        creator={userName}
+                        creator={workout.creator}
                         isPrivate={workout.isPrivate}
                         workoutId={workout.workoutId}
                         createdAt={workout.createdAt}
-                        isFavorite={workout.favorite}
+                        isFavorite={true}
                     />
                 </div>
             )
@@ -82,7 +80,7 @@ export default function Favoriteworkouts() {
                         isPrivate={workout.isPrivate}
                         workoutId={workout.workoutId}
                         createdAt={workout.createdAt}
-                        isFavorite={workout.favorite}
+                        isFavorite={true}
                     />
                 </div>
             );

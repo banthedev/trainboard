@@ -6,7 +6,7 @@ export default function ProtectedRoute({ children }) {
     const { user } = UserAuth();
     if (!user) {
  
-        console.log("Error: You cannot access this page without an account")
+        console.error("Error: You cannot access this page without an account")
         return <Navigate to='/'/>;
     }
     return children;

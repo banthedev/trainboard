@@ -56,20 +56,19 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
             console.log("Unable to delete workout: " + error);
         }
     }
-
+    
     async function handleFavoriteWorkout() {
         try {
             setIsFavorited(!isFavorited);
             if (!isFavorited) {
-                console.log("Workout is favorited")
                 await addFavoriteWorkoutToUserDocument(user, workoutId);
             } else {
-                console.log("Workout unfavorited")
                 await removeFavoriteWorkoutFromUserDocument(user, workoutId);
             }
             await updateFavoriteWorkout(user, workoutName, workoutId, isPrivate, !(isFavorited));
+
         } catch (error) {
-            console.log("Unable to favorite workout: " + error);
+            throw("Unable to favorite workout: " + error);
         }
     }
 
@@ -81,7 +80,7 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
             <Box py={"4px"} >
                 <HStack justifyContent="center">
                     {isFavorited ?
-                        <StarIcon w={4} h={8} color="yellow.400" onClick={handleFavoriteWorkout} />
+                        <StarIcon w={5} h={8} color="yellow.400" onClick={handleFavoriteWorkout} />
                         :
                         <StarIcon w={4} h={8} color="gray.900" onClick={handleFavoriteWorkout} />
                     }

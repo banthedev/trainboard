@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
         deleteUser(user).then(() => {
             logout();
         }).catch((error) => {
-            console.log(error);
+            console.error(error);
         });
     }
 

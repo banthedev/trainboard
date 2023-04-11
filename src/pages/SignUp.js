@@ -50,7 +50,7 @@ export default function SignUp() {
             navigate('/dashboard')
         } catch (e) {
             setError("Error: failed to create an account");
-            console.log(e.message);
+            console.error(e.message);
         }
         setLoading(false);
     };
