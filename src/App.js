@@ -1,7 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import './App.css';
-import Explore from './pages/Explore';
+import ExplorePage from './pages/Explore';
 import HomePage from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import SignUp from './pages/SignUp';
@@ -68,7 +68,7 @@ function App() {
                             } />
                             <Route path="/explore" element={
                                 <ProtectedRoute>
-                                    <Explore />
+                                    <ExplorePage />
                                 </ProtectedRoute>
                             } />
                             <Route path="/create" element={
