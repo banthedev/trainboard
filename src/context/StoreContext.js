@@ -78,3 +78,8 @@ export async function deleteWorkoutFromCollecton(user, workoutName, isPrivate) {
         return false;
     }
 }
+
+// 
+export async function deleteUserDocument(user) {
+    await deleteDoc(doc(database, "users", user.uid));
+}
