@@ -15,6 +15,8 @@ import { Link } from 'react-router-dom';
 import { HamburgerIcon, ExternalLinkIcon, DeleteIcon, StarIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { deleteWorkoutFromCollecton } from '../context/StoreContext';
+import { useNavigate } from 'react-router-dom';
+import { updateFavoriteWorkout, addFavoriteWorkoutToUserDocument } from '../context/StoreContext';
 
 var colors = ['red', 'green', 'blue', 'yellow', 'orange', 'pink'];
 var textColors = ['black', 'white', 'white', 'black', 'black', 'black'];
@@ -47,12 +49,27 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
     // Convert Date to String
     const date = createdAt.toDate().toDateString();
     // Delete Workout
+    const navigate = useNavigate();
     async function handleDeleteWorkout() {
         try {
             await deleteWorkoutFromCollecton(user, workoutName, isPrivate);
             setWasDeleted(true);
+            setTimeout(() => {
+                //navigate('/dashboard');
+                window.location.reload();
+            }, 2000);
         } catch (error) {
             console.log("Unable to delete workout: " + error);
+        }
+    }
+
+    async function handleFavoriteWorkout() {
+        try {
+            setIsFavorited(!isFavorited);
+            await updateFavoriteWorkout(user, workoutName, isPrivate, !(isFavorited));
+            await addFavoriteWorkoutToUserDocument(user, workoutId);
+        } catch (error) {
+            console.log("Unable to favorite workout: " + error);
         }
     }
 
@@ -62,40 +79,36 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
     return (
         <WorkoutWrapper wasDeleted={wasDeleted}>
             <Box py={"4px"} >
-                <Text fontWeight="500" fontSize="xl" >
-                    {workoutName}
-                </Text>
-
-                {/* Workout Creator */}
                 <HStack justifyContent="center">
-                    <Text fontSize="l" fontWeight="600">
-                        @{creator}
+                    {isFavorited ?
+                        <StarIcon w={8} h={8} color="yellow.400" onClick={handleFavoriteWorkout}/>
+                        :
+                        <StarIcon w={8} h={8} color="gray.600" onClick={handleFavoriteWorkout}/>
+                    }
+                    <Text fontWeight="500" fontSize="xl" >
+                        {workoutName}
                     </Text>
-                </HStack>
-                {/* Workout Properties Menu */}
-                <Menu>
-                    <MenuButton
-                        as={IconButton}
-                        aria-label='Options'
-                        icon={<HamburgerIcon />}
-                        variant='outline'
-                    />
-                    <MenuList>
-                        <MenuItem icon={<ExternalLinkIcon />} onClick={() => { navigator.clipboard.writeText(workoutLink) }}>
-                            Share Workout
-                        </MenuItem>
-                        <MenuItem icon={<DeleteIcon />} onClick={handleDeleteWorkout}>
-                            Delete Workout
-                        </MenuItem>
-                    </MenuList>
-                </Menu>
-                { isFavorited ?
-                <StarIcon w={8} h={8} color="yellow.400" />
-                :
-                <StarIcon w={8} h={8} color="gray.600" />
-            }
-            </Box>
 
+                    {/* Workout Properties Menu */}
+                    <Menu>
+                        <MenuButton
+                            as={IconButton}
+                            aria-label='Options'
+                            icon={<HamburgerIcon />}
+                            variant='outline'
+                        />
+                        <MenuList>
+                            <MenuItem icon={<ExternalLinkIcon />} onClick={() => { navigator.clipboard.writeText(workoutLink) }}>
+                                Share Workout
+                            </MenuItem>
+                            <MenuItem icon={<DeleteIcon />} onClick={handleDeleteWorkout}>
+                                Delete Workout
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
+                </HStack>
+
+            </Box>
             {/* Portion for labels */}
             <VStack
                 bg={'white'}

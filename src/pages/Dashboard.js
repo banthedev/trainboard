@@ -3,10 +3,10 @@ import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
 import { Heading, HStack, Box, Stack, Button } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy, where } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
-import { getUsername } from "../context/StoreContext";
+import { getUsername, getUserFavoritedWorkouts } from "../context/StoreContext";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
@@ -56,6 +56,40 @@ export default function Dashboard() {
         setUserWorkouts(uniqueWorkouts.slice(0, 4));
     }, [privateWorkouts, publicWorkouts]);
 
+    const favoritedWorkouts = getUserFavoritedWorkouts(user);
+
+    const [favoritedWorkoutData, setFavoritedWorkoutData] = useState([]);
+
+    useEffect(() => {
+        async function fetchFavoritedWorkouts() {
+            const favoritedWorkoutIds = favoritedWorkouts.map((workout) => workout.workoutId);
+            const workoutQuery = query(collection(database, "workouts"), where("workoutId", "in", favoritedWorkoutIds));
+            const workoutSnapshot = await getDocs(workoutQuery);
+            const workoutData = workoutSnapshot.docs.map((doc) => doc.data());
+            setFavoritedWorkoutData(workoutData);
+
+        }
+        if (favoritedWorkouts.length > 0) {
+            fetchFavoritedWorkouts();
+        }
+    }, [favoritedWorkouts]);
+
+    const favoritedWorkoutCards = favoritedWorkoutData.map((workout) => {
+        return (
+            <div key={workout.workoutId}>
+                <WorkoutCard
+                    key={workout.workoutId}
+                    user={user}
+                    workoutName={workout.workoutName}
+                    creator={workout.creatorName}
+                    isPrivate={workout.isPrivate}
+                    workoutId={workout.workoutId}
+                    createdAt={workout.createdAt}
+                    isFavorite={true}
+                />
+            </div>
+        )
+    });
     const recentWorkoutCards = userWorkouts.map((workout) => {
         return (
             <div key={workout.workoutName}>
@@ -104,7 +138,7 @@ export default function Dashboard() {
                         Recent Workouts
                     </Heading>
                 </HStack>
-                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
+                <Box sx={{ display: "flex", alignItems: "center", margin: "auto" }}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
@@ -125,14 +159,14 @@ export default function Dashboard() {
                     <Heading as='h3' size='lg' float='left' color='white'>
                         Favorite Workouts
                     </Heading>
-                    <Link to="/myworkouts">
+                    <Link to="/favoriteworkouts">
                         <Button marginLeft='2%' paddingLeft='4px' paddingRight='4px' href='/favoriteworkouts' backgroundColor='white' fontWeight='bold'>
                             More
                         </Button>
                     </Link>
                 </HStack>
 
-                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
+                <Box sx={{ display: "flex", alignItems: "center", margin: "auto" }}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
@@ -145,7 +179,7 @@ export default function Dashboard() {
                             gridTemplateColumns: 'repeat(4, minmax(200px, 350px))',
                             gridGap: '30px',
                         }} >
-                        {/*publicWorkoutCards*/}
+                        {favoritedWorkoutCards}
                     </Stack>
                 </Box>
 
@@ -160,7 +194,7 @@ export default function Dashboard() {
                     </Link>
                 </HStack>
 
-                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
+                <Box sx={{ display: "flex", alignItems: "center", margin: "auto" }}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"

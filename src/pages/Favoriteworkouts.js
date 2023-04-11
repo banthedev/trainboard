@@ -65,11 +65,13 @@ export default function Favoriteworkouts() {
             <div key={workout.workoutName}>
                 <WorkoutCard
                     key={workout.workoutName}
+                    user={user}
                     workoutName={workout.workoutName}
                     creator={userName}
                     isPrivate={workout.isPrivate}
                     workoutId={workout.workoutId}
                     createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
                 />
             </div>
         );

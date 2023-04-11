@@ -1,5 +1,5 @@
 import { database } from '../firebase';
-import { doc, getDoc, setDoc, deleteDoc, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, Timestamp, updateDoc, arrayUnion, collection, getDocs } from 'firebase/firestore';
 
 export function addUserToCollection(uid, username, email) {
     return setDoc(doc(database, "users", uid), {
@@ -78,3 +78,45 @@ export async function deleteWorkoutFromCollecton(user, workoutName, isPrivate) {
         return false;
     }
 }
+
+
+export async function updateFavoriteWorkout(user, workoutName, isPrivate, favoriteValue) {
+    let subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
+    const ref = doc(database, "users", user.uid, subcollectionName, workoutName);
+    try {
+        console.log("Updating favorite: ", favoriteValue);
+        await updateDoc(ref, {
+            favorite: favoriteValue,
+        });
+        return true;
+    } catch (error) {
+        console.error("Error updating favorite: ", error);
+        return false;
+    }
+}
+
+export async function addFavoriteWorkoutToUserDocument(user, workoutId) {
+    const ref = doc(database, "users", user.uid);
+    try {
+        await updateDoc(ref, {
+            favoritedWorkouts: arrayUnion(workoutId),
+        });
+        return true;
+    } catch (error) {
+        console.error("Error updating favorite: ", error);
+        return false;
+    }
+}
+
+export async function getUserFavoritedWorkouts(user) {
+    const workoutsRef = collection(database, 'workouts')
+    const favoritedWorkouts = user.favorites || []
+    const workoutDocs = await getDocs(workoutsRef)
+    const workouts = workoutDocs.docs.map((doc) => {
+      const workout = doc.data()
+      return { ...workout, id: doc.id }
+    })
+    const favoritedWorkoutData = workouts.filter((workout) => favoritedWorkouts.includes(workout.id))
+    return favoritedWorkoutData
+  }
+  
