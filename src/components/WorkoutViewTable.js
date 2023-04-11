@@ -9,7 +9,7 @@ import {
     Input,
 } from '@chakra-ui/react';
 
-export default function WorkoutTable({ exercises, onExerciseChange }) {
+export default function WorkoutViewTable({ exercises, onExerciseChange }) {
     const columns = ["exerciseName", "sets", "reps"];
 
     const handleCellChange = (value, rowIndex, colIndex) => {
@@ -44,6 +44,8 @@ export default function WorkoutTable({ exercises, onExerciseChange }) {
                              border-radius={"2px"}
                              padding={"0px"}>
                              <Input
+                                 readOnly
+                                 border="none"
                                  height="75px"
                                  borderColor={"white"}
                                  value={exercise[key]}

@@ -56,7 +56,7 @@ export default function WorkoutCard({ user, workoutName, creator, isPrivate, wor
             setTimeout(() => {
                 //navigate('/dashboard');
                 window.location.reload();
-            }, 2000);
+            }, 100);
         } catch (error) {
             console.log("Unable to delete workout: " + error);
         }

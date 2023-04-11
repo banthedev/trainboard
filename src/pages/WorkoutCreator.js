@@ -1,5 +1,6 @@
 // React & React Router
 import { useState } from "react";
+import { HStack, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 // Firebase
 import { addWorkoutToDocument } from "../context/StoreContext";
@@ -74,35 +75,42 @@ export default function WorkoutCreator() {
 
     return (
         <div>
-            <Background />
-            <Navbar />
-            {saved &&
-                <Alert status='success'>
-                    <AlertIcon />
-                    Workout Saved! Redirecting...
-                </Alert>
-            }
-            <div style={{ backgroundColor: "white", width: "90%", display: "inline-block", marginTop: "1%" }}>
-                <Editable defaultValue='Workout #1' fontSize="2xl">
-                    <EditablePreview />
-                    <EditableInput onChange={handleWorkoutName} />
-                </Editable>
-                <WorkoutTable exercises={exercises} onExerciseChange={handleExerciseChange} />
-                <Button colorScheme='green' size='lg' onClick={handleAddExercise}>
-                    Add Exercise
-                </Button>
-            </div>
-            <div style={{ padding: 10, backgroundColor: "white", width: "90%", display: "inline-block", paddingTop: "1%" }}>
-                <Checkbox colorScheme='green' onChange={handleCheckboxChange}>Make Public</Checkbox>
+                <Background />
+                <Navbar />
+                <div  id="creatorcontentdiv"> 
+                    <style>
+                        {'#creatorcontentdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; height:auto; min-height:100% }'}
+                    </style>
+                    {saved &&
+                        <Alert status='success'>
+                            <AlertIcon />
+                            Workout Saved! Redirecting...
+                        </Alert>
+                    }
+                    <div style={{ backgroundColor: "white", width: "90%", display: "inline-block", marginTop: "1%", marginBottom: "1%" }}>
+                        <Editable defaultValue='Workout #1' fontSize="2xl" fontWeight={"bold"} textDecoration="underline">
+                            <EditablePreview />
+                            <EditableInput onChange={handleWorkoutName} />
+                        </Editable>
+                        <WorkoutTable exercises={exercises} onExerciseChange={handleExerciseChange} />
 
-                <Button colorScheme='green' size='lg' ml={10} onClick={handleSaveWorkout}>
-                    Save Workout
-                </Button>
+                        <br></br>
+                        <br></br>
+                        <Button colorScheme='green' size='lg' onClick={handleAddExercise}>
+                            Add Exercise
+                        </Button>
+                        <br></br>
+                        <br></br>
 
-                <Button colorScheme='red' size='lg' ml={10}>
-                    Delete Workout
-                </Button>
+                        <HStack style={{ padding: 10, paddingTop: "1%" , justifyContent:"center"}} spacing="50px">
+                            <Checkbox colorScheme='green' onChange={handleCheckboxChange}>Make Public</Checkbox>
+
+                            <Button colorScheme='green' size='lg' onClick={handleSaveWorkout}>
+                                Save Workout
+                            </Button>
+                        </HStack>
+                    </div>
+                </div>
             </div>
-        </div>
     )
 }
