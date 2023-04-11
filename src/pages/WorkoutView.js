@@ -78,11 +78,17 @@ export default function WorkoutView() {
                     Workout has been deleted! Redirecting...
                 </Alert>
             }
-            {ownsWorkout ? <SelfFeedbackBar workoutName={workout.workoutName} isPrivate={workout.isPrivate} wasDeleted={wasDeleted} setWasDeleted={setWasDeleted} /> : <FeedbackBar />}
-            <div  id="viewdiv"> 
-                    <style>
-                        {'#viewdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; height:auto; min-height:100% }'}
-                    </style>
+            {
+                ownsWorkout
+                    ?
+                    <SelfFeedbackBar workoutName={workout.workoutName} workoutId={workout.workoutId} isPrivate={workout.isPrivate} isFavorite={workout.favorite} wasDeleted={wasDeleted} setWasDeleted={setWasDeleted} />
+                    :
+                    <FeedbackBar
+                    />}
+            <div id="viewdiv">
+                <style>
+                    {'#viewdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; height:auto; min-height:100% }'}
+                </style>
                 <div id="workoutviewcontentdiv">
                     <style>
                         {'#workoutviewcontentdiv { background-color:white; margin-top:1%; display:inline-block; width:90%; padding-bottom:1%"; margin-bottom:"1%";}'}
@@ -93,7 +99,7 @@ export default function WorkoutView() {
                         createdAt={workout.createdAt}
                         isPrivate={workout.isPrivate}
                     />
-                    <WorkoutViewTable exercises={workout.workoutExercises} onExerciseChange={handleExerciseChange}/>
+                    <WorkoutViewTable exercises={workout.workoutExercises} onExerciseChange={handleExerciseChange} />
                 </div>
             </div>
         </div>

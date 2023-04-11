@@ -3,10 +3,10 @@ import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
 import { Heading, HStack, Box, Stack, Button } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy, where, doc, onSnapshot } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
-import { getUsername } from "../context/StoreContext";
+import { getUsername, getFavoritedWorkoutsFromCollection } from "../context/StoreContext";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
@@ -17,42 +17,64 @@ export default function Dashboard() {
     const [publicWorkouts, setPublicWorkouts] = useState([]);
     const [userWorkouts, setUserWorkouts] = useState([]);
     const [userName, setUserName] = useState("");
+    const [favoriteWorkouts, setFavoriteWorkouts] = useState([]);
+
+    const uid = getUserId();
+    const privateQ = query(
+        collection(database, "users", uid, "Private Workouts"), orderBy("createdAt", "desc")
+    );
+    const publicQ = query(
+        collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
+    );
 
     useEffect(() => {
         async function fetchData() {
-            const uid = getUserId();
-            const privateQ = query(
-                collection(database, "users", uid, "Private Workouts"), orderBy("createdAt", "desc")
-            );
-            const publicQ = query(
-                collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
-            );
-
-            const privateSnapshot = getDocs(privateQ);
-            const publicSnapshot = getDocs(publicQ);
-            const [privateData, publicData] = await Promise.all([
-                privateSnapshot.then((querySnapshot) => {
-                    return querySnapshot.docs.map((doc) => doc.data());
-                }),
-                publicSnapshot.then((querySnapshot) => {
-                    return querySnapshot.docs.map((doc) => doc.data());
-                }),
+            const [privateSnapshot, publicSnapshot] = await Promise.all([
+                getDocs(privateQ),
+                getDocs(publicQ),
             ]);
+            const privateData = privateSnapshot.docs.map((doc) => doc.data());
+            const publicData = publicSnapshot.docs.map((doc) => doc.data());
+
+            // Set Private & Public Workouts to state
             setPrivateWorkouts(privateData);
             setPublicWorkouts(publicData);
+
+            // Get username
             const name = await getUsername(user);
             setUserName(name);
+
+            // Get favorited workouts
+            const favWorkouts = await getFavoritedWorkoutsFromCollection(user);
+            setFavoriteWorkouts(favWorkouts);
         }
         fetchData();
     }, [user]);
 
     useEffect(() => {
-        const workouts = [...privateWorkouts, ...publicWorkouts];
-        const uniqueWorkouts = workouts.filter((workout, index) => {
-            const exists = workouts.findIndex((w) => w.workoutId === workout.workoutId);
-            return exists === index;
+        const unsubscribePrivate = onSnapshot(privateQ, (snapshot) => {
+            const data = snapshot.docs.map((doc) => doc.data());
+            setPrivateWorkouts(data);
         });
-        // sort the workouts array by createdAt date in descending order
+
+        const unsubscribePublic = onSnapshot(publicQ, (snapshot) => {
+            const data = snapshot.docs.map((doc) => doc.data());
+            setPublicWorkouts(data);
+        });
+
+        return () => {
+            unsubscribePrivate();
+            unsubscribePublic();
+        };
+    }, [getUserId]);
+
+
+
+    // Combine private and public workouts into one array
+    useEffect(() => {
+        const workouts = [...privateWorkouts, ...publicWorkouts];
+        const uniqueWorkouts = Array.from(new Set(workouts.map((workout) => workout.workoutId)))
+            .map((workoutId) => workouts.find((workout) => workout.workoutId === workoutId));
         setUserWorkouts(uniqueWorkouts.slice(0, 4));
     }, [privateWorkouts, publicWorkouts]);
 
@@ -67,11 +89,11 @@ export default function Dashboard() {
                     isPrivate={workout.isPrivate}
                     workoutId={workout.workoutId}
                     createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
                 />
             </div>
         )
     });
-
 
     const userWorkoutCards = userWorkouts.map((workout) => {
         return (
@@ -84,6 +106,24 @@ export default function Dashboard() {
                     isPrivate={workout.isPrivate}
                     workoutId={workout.workoutId}
                     createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
+                />
+            </div>
+        )
+    });
+
+    const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
+        return (
+            <div key={workout.workoutName}>
+                <WorkoutCard
+                    key={workout.workoutName}
+                    user={user}
+                    workoutName={workout.workoutName}
+                    creator={userName}
+                    isPrivate={workout.isPrivate}
+                    workoutId={workout.workoutId}
+                    createdAt={workout.createdAt}
+                    isFavorite={workout.favorite}
                 />
             </div>
         )
@@ -103,7 +143,7 @@ export default function Dashboard() {
                         Recent Workouts
                     </Heading>
                 </HStack>
-                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
+                <Box sx={{ display: "flex", alignItems: "center", margin: "auto" }}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
@@ -124,14 +164,14 @@ export default function Dashboard() {
                     <Heading as='h3' size='lg' float='left' color='white'>
                         Favorite Workouts
                     </Heading>
-                    <Link to="/myworkouts">
+                    <Link to="/favoriteworkouts">
                         <Button marginLeft='2%' paddingLeft='4px' paddingRight='4px' href='/favoriteworkouts' backgroundColor='white' fontWeight='bold'>
                             More
                         </Button>
                     </Link>
                 </HStack>
 
-                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
+                <Box sx={{ display: "flex", alignItems: "center", margin: "auto" }}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
@@ -144,7 +184,7 @@ export default function Dashboard() {
                             gridTemplateColumns: 'repeat(4, minmax(200px, 350px))',
                             gridGap: '30px',
                         }} >
-                        {/*publicWorkoutCards*/}
+                        {favoriteWorkoutCards}
                     </Stack>
                 </Box>
 
@@ -159,7 +199,7 @@ export default function Dashboard() {
                     </Link>
                 </HStack>
 
-                <Box sx={{display:"flex", alignItems: "center", margin:"auto"}}>
+                <Box sx={{ display: "flex", alignItems: "center", margin: "auto" }}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
                         textAlign="center"
