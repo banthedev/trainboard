@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function WorkoutViewTable({ exercises, onExerciseChange }) {
-    const columns = ["Exercise Name", "sets", "reps"];
+    const columns = ["exerciseName", "sets", "reps"];
 
     const handleCellChange = (value, rowIndex, colIndex) => {
         const newExercises = exercises.map((exercise, i) => {
