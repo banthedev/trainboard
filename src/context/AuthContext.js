@@ -5,6 +5,7 @@ import {
   signOut,
   onAuthStateChanged,
   sendPasswordResetEmail,
+  deleteUser
 } from 'firebase/auth';
 import { auth } from '../firebase';
 
@@ -40,6 +41,16 @@ export const AuthProvider = ({ children }) => {
     return user.uid;
   }
 
+  // Delete User
+  function deleteAccount() {
+    const user = auth.currentUser;
+    deleteUser(user).then(() => {
+      logout(); 
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -58,7 +69,8 @@ export const AuthProvider = ({ children }) => {
     resetPassword,
     addUserToCollection,
     addWorkoutToDocument,
-    getUserId
+    getUserId,
+    deleteAccount
     // getUsername,
     // removeWorkoutFromDocument,
   }
