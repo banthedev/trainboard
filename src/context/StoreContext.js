@@ -161,9 +161,34 @@ export async function getFavoritedWorkoutsFromCollection(user) {
         console.error('Error in getFavoritedWorkoutsFromCollection: ', error);
         throw error;
     }
-
 }
 
+// Edit user's workout (in user document)
+export async function editUserWorkout(user, workoutName, isPrivate, newExercises) {
+    try {
+        let subcollectionName = isPrivate ? "Private Workouts" : "Public Workouts";
+        const docRef = doc(database, "users", user.uid, subcollectionName, workoutName);
+        await updateDoc(docRef, {
+            workoutExercises: newExercises,
+        });
+    } catch (error) {
+        console.error("Error editing workout (in-context)): ", error);
+    }
+}
+
+// Edit user's workout (in main document)
+export async function editMainWorkout(workoutId, newExercises) {
+    try {
+        const docRef = doc(database, "workouts", workoutId);
+        await updateDoc(docRef, {
+            workoutExercises: newExercises,
+        });
+    } catch (error) {
+        console.error("Error editing workout (main): ", error);
+    }
+}
+
+// Delete user document from users collection
 export async function deleteUserDocument(user) {
     await deleteDoc(doc(database, "users", user.uid));
 }
