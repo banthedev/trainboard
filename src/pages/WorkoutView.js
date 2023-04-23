@@ -23,6 +23,7 @@ import {
 import Navbar from "../components/Navbar";
 import Background from "../components/Background";
 import WorkoutInfo from "../components/WorkoutInfo";
+import WorkoutTable from "../components/WorkoutTable";
 import WorkoutViewTable from "../components/WorkoutViewTable";
 import FeedbackBar from "../components/FeedbackBar";
 import SelfFeedbackBar from "../components/SelfFeedbackBar";
@@ -189,16 +190,34 @@ export default function WorkoutView() {
                             </Menu>
                     </Box>
                     <div ref = {ref} >
-                        <WorkoutInfo
-                            creator={workout.creator}
-                            workoutName={workout.workoutName}
-                            createdAt={workout.createdAt}
-                            isPrivate={workout.isPrivate}
-                        />
+                    <WorkoutInfo
+                        creator={workout.creator}
+                        workoutName={workout.workoutName}
+                        createdAt={workout.createdAt}
+                        isPrivate={workout.isPrivate}
+                    />
+                    {(ownsWorkout && isEditing) ?
+                        <WorkoutTable exercises={exercises} onExerciseChange={handleExerciseChange} />
+                        :
                         <WorkoutViewTable exercises={workout.workoutExercises} onExerciseChange={handleExerciseChange} />
-                        </div>
+                    }
+                    {isEditing &&
+                        <Button colorScheme='green' size='lg' onClick={handleAddExercise}>
+                            Add Exercise
+                        </Button>
+                    }
+                </div>
+                {isEditing ?
+                    <div>
+                        <Button colorScheme='green' size='lg' onClick={handleSaveWorkout}>Save Changes</Button>
+                        <Button colorScheme='red' size='lg' onClick={handleCancelChanges}>Cancel Changes</Button>
+                    </div>
+                    :
+                    <Button colorScheme='green' size='lg' onClick={handleIsEditing}>Edit Workout</Button>
+                }
                 </div>
             </div>
-        </div>
+        </div >
     )
+
 }
