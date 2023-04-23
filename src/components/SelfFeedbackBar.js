@@ -65,24 +65,6 @@ export default function SelfFeedbackBar({ workoutName, workoutId, isPrivate, isF
                             Delete Workout
                         </Button>
 
-                        <Flex alignItems={'center'}>
-                            <Menu >
-                                <MenuButton
-                                    as={Button}
-                                    cursor={'pointer'}
-                                    label={'Muscle Group...'}
-                                    bg="gold"
-                                >
-                                    Export
-                                </MenuButton>
-                                <MenuList>
-                                    <MenuItem>Image</MenuItem>
-                                    <MenuDivider />
-                                    <MenuItem>Pdf</MenuItem>
-                                </MenuList>
-                            </Menu>
-                        </Flex>
-
                         <Button bg="green" color="white" onClick={handleFavoriteWorkout}>
                             Favorite
                         </Button>
