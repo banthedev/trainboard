@@ -6,12 +6,19 @@ import { database } from "../firebase";
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 // Chakra-UI imports
 import {
-    Alert,
-    AlertIcon,
+    Box,
+    Flex,
+    HStack,
     Button,
-    Checkbox,
-    HStack
-} from "@chakra-ui/react";
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuDivider,
+    useColorModeValue,
+    Alert,
+    AlertIcon
+} from '@chakra-ui/react';
 // Component imports
 import Navbar from "../components/Navbar";
 import Background from "../components/Background";
@@ -24,8 +31,11 @@ import { getUsername, editUserWorkout, editMainWorkout } from "../context/StoreC
 import { UserAuth } from "../context/AuthContext";
 // Helper imports
 import { checkIfUserCreated } from "../helpers/helper.js";
-import WorkoutTable from "../components/WorkoutTable";
 
+import React, { createRef } from 'react'
+import { useScreenshot } from 'use-react-screenshot'
+
+import html2canvas from 'html2canvas';
 
 export default function WorkoutView() {
     // React States
@@ -100,6 +110,30 @@ export default function WorkoutView() {
         }, 1000);
     };
 
+    // check if workout name is already loaded (it always should be but it breaks if you dont check)
+    var imgName
+    if(workout)
+        imgName = workout.workoutName + ".png";
+    else 
+        imgName = "workout.png";
+
+    const ref = createRef(null)
+    const [image, takeScreenshot] = useScreenshot()
+
+    const getImage = () => { 
+        // take screen shot
+        takeScreenshot(ref.current);
+
+        // create download link for image and click it
+        var ss = document.createElement('a');
+        ss.setAttribute('href', image);
+        ss.setAttribute('download', imgName);
+        ss.style.display = 'none';
+        document.body.appendChild(ss);
+        ss.click();
+        document.body.removeChild(ss);
+    }
+
     // Check if workout is loaded, if not display loading
     if (!workout) {
         return <div>Loading...</div>;
@@ -137,33 +171,34 @@ export default function WorkoutView() {
                     <style>
                         {'#workoutviewcontentdiv { background-color:white; margin-top:1%; display:inline-block; width:90%; padding-bottom:1%"; margin-bottom:"1%";}'}
                     </style>
-                    <WorkoutInfo
-                        creator={workout.creator}
-                        workoutName={workout.workoutName}
-                        createdAt={workout.createdAt}
-                        isPrivate={workout.isPrivate}
-                    />
-                    {(ownsWorkout && isEditing) ?
-                        <WorkoutTable exercises={exercises} onExerciseChange={handleExerciseChange} />
-                        :
+                    <Box alignItems={'center'} margin = "auto" marginTop = "10px" marginBottom = "-30px">
+                            <Menu >
+                                <MenuButton
+                                    as={Button}
+                                    cursor={'pointer'}
+                                    label={'Muscle Group...'}
+                                    bg="gold"
+                                    >
+                                    Export
+                                </MenuButton>
+                                <MenuList>
+                                    <MenuItem id="imgbutton" onClick = {getImage}>Image</MenuItem>
+                                    <MenuDivider />
+                                    <MenuItem>Pdf</MenuItem>
+                                </MenuList>
+                            </Menu>
+                    </Box>
+                    <div ref = {ref} >
+                        <WorkoutInfo
+                            creator={workout.creator}
+                            workoutName={workout.workoutName}
+                            createdAt={workout.createdAt}
+                            isPrivate={workout.isPrivate}
+                        />
                         <WorkoutViewTable exercises={workout.workoutExercises} onExerciseChange={handleExerciseChange} />
-                    }
-                    {isEditing &&
-                        <Button colorScheme='green' size='lg' onClick={handleAddExercise}>
-                            Add Exercise
-                        </Button>
-                    }
+                        </div>
                 </div>
-                {isEditing ?
-                    <div>
-                        <Button colorScheme='green' size='lg' onClick={handleSaveWorkout}>Save Changes</Button>
-                        <Button colorScheme='red' size='lg' onClick={handleCancelChanges}>Cancel Changes</Button>
-                    </div>
-                    :
-                    <Button colorScheme='green' size='lg' onClick={handleIsEditing}>Edit Workout</Button>
-                }
             </div>
-        </div >
+        </div>
     )
-
 }
