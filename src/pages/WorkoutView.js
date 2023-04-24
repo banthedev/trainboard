@@ -7,17 +7,15 @@ import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 // Chakra-UI imports
 import {
     Box,
-    Flex,
-    HStack,
     Button,
     Menu,
     MenuButton,
     MenuList,
     MenuItem,
     MenuDivider,
-    useColorModeValue,
     Alert,
-    AlertIcon
+    AlertIcon,
+    Center
 } from '@chakra-ui/react';
 // Component imports
 import Navbar from "../components/Navbar";
@@ -26,7 +24,6 @@ import WorkoutInfo from "../components/WorkoutInfo";
 import WorkoutTable from "../components/WorkoutTable";
 import WorkoutViewTable from "../components/WorkoutViewTable";
 import FeedbackBar from "../components/FeedbackBar";
-import SelfFeedbackBar from "../components/SelfFeedbackBar";
 // Context imports
 import { getUsername, editUserWorkout, editMainWorkout } from "../context/StoreContext";
 import { UserAuth } from "../context/AuthContext";
@@ -112,16 +109,11 @@ export default function WorkoutView() {
     };
 
     // check if workout name is already loaded (it always should be but it breaks if you dont check)
-    var imgName
-    if(workout)
-        imgName = workout.workoutName + ".png";
-    else 
-        imgName = "workout.png";
-
+    let imgName = workout ? workout.workoutName + ".png" : "workout.png";
     const ref = createRef(null)
     const [image, takeScreenshot] = useScreenshot()
 
-    const getImage = () => { 
+    const getImage = () => {
         // take screen shot
         takeScreenshot(ref.current);
 
@@ -157,67 +149,71 @@ export default function WorkoutView() {
                     Workout has been edited!
                 </Alert>
             }
-            {
-                ownsWorkout
-                    ?
-                    <SelfFeedbackBar workoutName={workout.workoutName} workoutId={workout.workoutId} isPrivate={workout.isPrivate} isFavorite={workout.favorite} wasDeleted={wasDeleted} setWasDeleted={setWasDeleted} />
-                    :
-                    <FeedbackBar
-                    />}
-            <div id="viewdiv">
-                <style>
-                    {'#viewdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; height:auto; min-height:100% }'}
-                </style>
+
+            <FeedbackBar
+                workoutName={workout.workoutName}
+                workoutId={workout.workoutId}
+                isPrivate={workout.isPrivate}
+                isFavorite={workout.favorite}
+                wasDeleted={wasDeleted}
+                setWasDeleted={setWasDeleted}
+                ownsWorkout={ownsWorkout}
+            />
+
+            <div
+                style={{ backgroundColor: "rgba(20,20,20,0.6)", marginTop: "1%", display: "inline-block", paddingBottom: 12, width: "90%", height: "auto", minHeight: "100%" }}
+            >
+
                 <div id="workoutviewcontentdiv">
                     <style>
                         {'#workoutviewcontentdiv { background-color:white; margin-top:1%; display:inline-block; width:90%; padding-bottom:1%"; margin-bottom:"1%";}'}
                     </style>
-                    <Box alignItems={'center'} margin = "auto" marginTop = "10px" marginBottom = "-30px">
-                            <Menu >
-                                <MenuButton
-                                    as={Button}
-                                    cursor={'pointer'}
-                                    label={'Muscle Group...'}
-                                    bg="gold"
-                                    >
-                                    Export
-                                </MenuButton>
-                                <MenuList>
-                                    <MenuItem id="imgbutton" onClick = {getImage}>Image</MenuItem>
-                                    <MenuDivider />
-                                    <MenuItem>Pdf</MenuItem>
-                                </MenuList>
-                            </Menu>
-                    </Box>
-                    <div ref = {ref} >
-                    <WorkoutInfo
-                        creator={workout.creator}
-                        workoutName={workout.workoutName}
-                        createdAt={workout.createdAt}
-                        isPrivate={workout.isPrivate}
-                    />
-                    {(ownsWorkout && isEditing) ?
-                        <WorkoutTable exercises={exercises} onExerciseChange={handleExerciseChange} />
-                        :
-                        <WorkoutViewTable exercises={workout.workoutExercises} onExerciseChange={handleExerciseChange} />
-                    }
-                    {isEditing &&
-                        <Button colorScheme='green' size='lg' onClick={handleAddExercise}>
-                            Add Exercise
-                        </Button>
-                    }
-                </div>
-                {isEditing ?
-                    <div>
-                        <Button colorScheme='green' size='lg' onClick={handleSaveWorkout}>Save Changes</Button>
-                        <Button colorScheme='red' size='lg' onClick={handleCancelChanges}>Cancel Changes</Button>
+                    <div ref={ref} >
+                        <WorkoutInfo
+                            creator={workout.creator}
+                            workoutName={workout.workoutName}
+                            createdAt={workout.createdAt}
+                            isPrivate={workout.isPrivate}
+                        />
+                        {(ownsWorkout && isEditing) ?
+                            <WorkoutTable exercises={exercises} onExerciseChange={handleExerciseChange} />
+                            :
+                            <WorkoutViewTable exercises={workout.workoutExercises} onExerciseChange={handleExerciseChange} />
+                        }
+                        {isEditing &&
+                            <Button colorScheme='green' size='lg' onClick={handleAddExercise}>
+                                Add Exercise
+                            </Button>
+                        }
                     </div>
-                    :
-                    <Button colorScheme='green' size='lg' onClick={handleIsEditing}>Edit Workout</Button>
-                }
+                    <Center style={{ marginBottom: 20 }}>
+                        {isEditing ?
+                            <div>
+                                <Button colorScheme='green' size='lg' onClick={handleSaveWorkout}>Save Changes</Button>
+                                <Button colorScheme='red' size='lg' onClick={handleCancelChanges}>Cancel Changes</Button>
+                            </div>
+                            :
+                            <Button colorScheme='green' size='lg' onClick={handleIsEditing}>Edit Workout</Button>
+                        }
+                        <Menu>
+                            <MenuButton
+                                as={Button}
+                                cursor={'pointer'}
+                                label={'Muscle Group...'}
+                                bg="gold"
+                                style={{ marginLeft: 20 }}
+                            >
+                                Export
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem id="imgbutton" onClick={getImage}>Image</MenuItem>
+                                <MenuDivider />
+                                <MenuItem>Pdf</MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </Center>
                 </div>
             </div>
-        </div >
+        </div>
     )
-
 }
