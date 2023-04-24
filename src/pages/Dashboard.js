@@ -3,8 +3,8 @@ import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
 import ExploreWorkoutCard from "../components/ExploreWorkoutCards";
 import { Heading, HStack, Box, Stack, Button } from '@chakra-ui/react'
-import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy, where, doc, onSnapshot } from 'firebase/firestore'
+import { useState, useEffect, useMemo } from "react";
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
 import { getUsername, getFavoritedWorkoutsFromCollection } from "../context/StoreContext";
@@ -14,9 +14,7 @@ export default function Dashboard() {
     // Auth
     const { user, getUserId } = UserAuth();
     // State
-    const [privateWorkouts, setPrivateWorkouts] = useState([]);
-    const [publicWorkouts, setPublicWorkouts] = useState([]);
-    const [userWorkouts, setUserWorkouts] = useState([]);
+    const [workouts, setWorkouts] = useState([]);
     const [userName, setUserName] = useState("");
     const [favoriteWorkouts, setFavoriteWorkouts] = useState([]);
 
@@ -27,20 +25,9 @@ export default function Dashboard() {
     const publicQ = query(
         collection(database, "users", uid, "Public Workouts"), orderBy("createdAt", "desc")
     );
-    
+
     useEffect(() => {
         async function fetchData() {
-            const [privateSnapshot, publicSnapshot] = await Promise.all([
-                getDocs(privateQ),
-                getDocs(publicQ),
-            ]);
-            const privateData = privateSnapshot.docs.map((doc) => doc.data());
-            const publicData = publicSnapshot.docs.map((doc) => doc.data());
-
-            // Set Private & Public Workouts to state
-            setPrivateWorkouts(privateData);
-            setPublicWorkouts(publicData);
-
             // Get username
             const name = await getUsername(user);
             setUserName(name);
@@ -55,12 +42,16 @@ export default function Dashboard() {
     useEffect(() => {
         const unsubscribePrivate = onSnapshot(privateQ, (snapshot) => {
             const data = snapshot.docs.map((doc) => doc.data());
-            setPrivateWorkouts(data);
+            setWorkouts((prevWorkouts) =>
+                prevWorkouts.filter((workout) => !workout.isPrivate).concat(data)
+            );
         });
 
         const unsubscribePublic = onSnapshot(publicQ, (snapshot) => {
             const data = snapshot.docs.map((doc) => doc.data());
-            setPublicWorkouts(data);
+            setWorkouts((prevWorkouts) =>
+                prevWorkouts.filter((workout) => workout.isPrivate).concat(data)
+            );
         });
 
         return () => {
@@ -69,49 +60,37 @@ export default function Dashboard() {
         };
     }, [getUserId]);
 
-    // Combine private and public workouts into one array
-    useEffect(() => {
-        const workouts = [...privateWorkouts, ...publicWorkouts];
-        const uniqueWorkouts = Array.from(new Set(workouts.map((workout) => workout.workoutId)))
-            .map((workoutId) => workouts.find((workout) => workout.workoutId === workoutId));
-        setUserWorkouts(uniqueWorkouts.slice(0, 4));
-    }, [privateWorkouts, publicWorkouts]);
+    const recentWorkoutCards = useMemo(() => workouts.slice(0,4).map((workout) => (
+        <div key={workout.workoutName}>
+            <WorkoutCard
+                key={workout.workoutName}
+                user={user}
+                workoutName={workout.workoutName}
+                creator={userName}
+                isPrivate={workout.isPrivate}
+                workoutId={workout.workoutId}
+                createdAt={workout.createdAt}
+                isFavorite={workout.favorite}
+            />
+        </div>
+    )), [workouts, userName]);
 
-    const recentWorkoutCards = userWorkouts.map((workout) => {
-        return (
-            <div key={workout.workoutName}>
-                <WorkoutCard
-                    key={workout.workoutName}
-                    user={user}
-                    workoutName={workout.workoutName}
-                    creator={userName}
-                    isPrivate={workout.isPrivate}
-                    workoutId={workout.workoutId}
-                    createdAt={workout.createdAt}
-                    isFavorite={workout.favorite}
-                />
-            </div>
-        )
-    });
+    const userWorkoutCards = useMemo(() => workouts.slice(0,4).map((workout) => (
+        <div key={workout.workoutName}>
+            <WorkoutCard
+                key={workout.workoutName}
+                user={user}
+                workoutName={workout.workoutName}
+                creator={userName}
+                isPrivate={workout.isPrivate}
+                workoutId={workout.workoutId}
+                createdAt={workout.createdAt}
+                isFavorite={workout.favorite}
+            />
+        </div>
+    )), [workouts, userName]);
 
-    const userWorkoutCards = userWorkouts.map((workout) => {
-        return (
-            <div key={workout.workoutName}>
-                <WorkoutCard
-                    key={workout.workoutName}
-                    user={user}
-                    workoutName={workout.workoutName}
-                    creator={userName}
-                    isPrivate={workout.isPrivate}
-                    workoutId={workout.workoutId}
-                    createdAt={workout.createdAt}
-                    isFavorite={workout.favorite}
-                />
-            </div>
-        )
-    });
-
-    const favoriteWorkoutCards = favoriteWorkouts.map((workout) => {
+    const favoriteWorkoutCards = favoriteWorkouts.slice(0,4).map((workout) => {
         if (workout.creator !== userName) {
             return (
                 <div key={workout.workoutName}>
