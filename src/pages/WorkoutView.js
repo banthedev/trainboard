@@ -1,5 +1,5 @@
 // React & React Router
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, createRef } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 // Firestore imports
 import { database } from "../firebase";
@@ -29,10 +29,9 @@ import { UserAuth } from "../context/AuthContext";
 // Helper imports
 import { checkIfUserCreated } from "../helpers/helper.js";
 
-import React, { createRef } from 'react'
 import { useScreenshot } from 'use-react-screenshot'
-
 import html2canvas from 'html2canvas';
+import { jsPDF } from "jspdf";
 
 export default function WorkoutView() {
     // React States
@@ -112,6 +111,7 @@ export default function WorkoutView() {
     const ref = createRef(null)
     const [image, takeScreenshot] = useScreenshot()
 
+    // Function to download image
     const getImage = () => {
         // take screen shot
         takeScreenshot(ref.current);
@@ -125,6 +125,19 @@ export default function WorkoutView() {
         ss.click();
         document.body.removeChild(ss);
     }
+
+    let pdfName = workout ? workout.workoutName + ".pdf" : "workout.pdf"
+
+    const getPDF = () => {
+        takeScreenshot(ref.current);
+        const pdf = new jsPDF("p", "mm", "a4");
+        var width = pdf.internal.pageSize.getWidth();
+        var height = pdf.internal.pageSize.getHeight();
+        pdf.addImage(image, 'png', 0, 0, width, height*.5);
+        pdf.save(pdfName);
+        pdf.output('save',pdfName);
+    }
+
 
     // Check if workout is loaded, if not display loading
     if (!workout) {
@@ -205,9 +218,9 @@ export default function WorkoutView() {
                                 Export
                             </MenuButton>
                             <MenuList>
-                                <MenuItem id="imgbutton" onClick={getImage}>Image</MenuItem>
+                                <MenuItem onClick={getImage}>Image</MenuItem>
                                 <MenuDivider />
-                                <MenuItem>Pdf</MenuItem>
+                                <MenuItem onClick={getPDF}>PDF</MenuItem>
                             </MenuList>
                         </Menu>
                     </Center>
