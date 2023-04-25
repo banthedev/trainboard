@@ -12,10 +12,29 @@ import {
     Input,
     Button,
     Stack,
-    Image
+    Image,
+    Heading
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { UserAuth } from '../context/AuthContext';
 
 export default function Explore() {
+    const { resetPassword } = UserAuth();
+    // Email and Password reset states
+    const [email, setEmail] = useState('');
+    const [passwordReset, setPasswordReset] = useState(false);
+
+    async function handlePasswordReset() {
+        try {
+            await resetPassword(email);
+            setPasswordReset(true);
+            setTimeout(() => {
+                setPasswordReset(false);
+            }, 10000);
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
     return (
         <div>
             <Background />
@@ -28,7 +47,7 @@ export default function Explore() {
 
             <Center py={6}>
                 <Box
-                    maxW={'330px'}
+                    maxW={'500px'}
                     w={'full'}
                     bg={useColorModeValue('white', 'gray.800')}
                     boxShadow={'2xl'}
@@ -44,58 +63,55 @@ export default function Explore() {
                                 Change Password
                             </Text>
                             <Text fontSize={'xl'} fontWeight={800}>
-                                Please enter your old password and then confirm your new password, click save to save and return to profile
+                               Enter your email to reset your password, within the email you will be prompted to change your website.
                             </Text>
                         </Stack>
                     </Stack>
+                    {passwordReset ?
+                        <Text fontSize={'lg'} color={'green.400'}>
+                            A password reset link has been sent to your email. <br />Check your email
+                        </Text>
+
+                        : <Text fontSize={'lg'} color={'red.400'}>
+                            A password reset link will be sent to your email.
+                        </Text>
+                    }
                     {/*ADD EDIT FUNCTIONALITY TO BUTTONS*/}
-                    <Box bg={useColorModeValue('gray.50', 'gray.900')} px={6} py={10}>
-                        <FormControl id="old_password">
-                            <FormLabel>Old Password</FormLabel>
-                            <Input type="password" />
-                        </FormControl>
-                        <FormControl id="new_password">
-                            <FormLabel>New Password</FormLabel>
-                            <Input type="password" />
-                        </FormControl>
-                        <FormControl id="confirm_new_password">
-                            <FormLabel>Confirm New Password</FormLabel>
-                            <Input type="password" />
-                        </FormControl>
+                    <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
 
-                        <Link to='/profile'><Button
-                            mt={10}
-                            w={'full'}
-                            bg={'gray.600'}
-                            color={'white'}
-                            rounded={'xl'}
-                            boxShadow={'0 5px 20px 0px rgb(72 187 120 / 43%)'}
-                            _hover={{
-                                bg: 'gray.500',
-                            }}
-                            _focus={{
-                                bg: 'gray.600',
-                            }}>
-                            Go back
-                        </Button></Link>
+                        <FormControl id="email" color="black" onChange={(e) => setEmail(e.target.value)}>
+                            <FormLabel>Email address</FormLabel>
+                            <Input type="email" />
+                        </FormControl>
+                        {passwordReset ?
+                            <Button
+                                bg={'green.500'}
+                                color={'white'}
+                                _hover={{
+                                    bg: 'green.600',
+                                }}
+                                onClick={handlePasswordReset}
+                            >
+                                Link Sent
+                            </Button>
+                            :
+                            <Button
+                                bg={'red.500'}
+                                color={'white'}
+                                _hover={{
+                                    bg: 'red.600',
+                                }}
+                                onClick={handlePasswordReset}
+                            >
+                                Reset Password
+                            </Button>
 
-                            {/*save new password and return to profile*/}
-                        <Link to='/profile'><Button
-                            mt={10}
-                            w={'full'}
-                            bg={'green.600'}
-                            color={'white'}
-                            rounded={'xl'}
-                            boxShadow={'0 5px 20px 0px rgb(72 187 120 / 43%)'}
-                            _hover={{
-                                bg: 'green.500',
-                            }}
-                            _focus={{
-                                bg: 'green.600',
-                            }}>
-                            Save
-                        </Button></Link>
-                    </Box>
+                        }
+
+                        <Link to="/profile">
+                            <Text color="red.300">Back</Text>
+                        </Link>
+                    </Stack>
                 </Box>
             </Center>
         </div>
