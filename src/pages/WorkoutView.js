@@ -135,9 +135,9 @@ export default function WorkoutView() {
         const pdf = new jsPDF("p", "mm", "a4");
         var width = pdf.internal.pageSize.getWidth();
         var height = pdf.internal.pageSize.getHeight();
-        pdf.addImage(image, 'png', 0, 0, width, height*.5);
+        pdf.addImage(image, 'png', 0, 0, width, height * .5);
         pdf.save(pdfName);
-        pdf.output('save',pdfName);
+        pdf.output('save', pdfName);
     }
 
 
@@ -201,16 +201,18 @@ export default function WorkoutView() {
                         }
                     </div>
                     <Center style={{ marginBottom: 20 }}>
-                        {isEditing ?
+                        {(isEditing && ownsWorkout) &&
                             <div>
-                                <HStack marginTop = "10px">
+                                <HStack marginTop="10px">
                                     <Button color='white' bg='green' size='lg' onClick={handleSaveWorkout}>Save Changes</Button>
                                     <Button bg='red' size='lg' onClick={handleCancelChanges}>Cancel Changes</Button>
                                 </HStack>
                             </div>
-                            :
+                        }
+                        {ownsWorkout &&
                             <Button color='white' bg='green' size='lg' onClick={handleIsEditing}>Edit Workout</Button>
                         }
+
                         <Menu>
                             <MenuButton
                                 as={Button}
