@@ -56,28 +56,26 @@ export default function FeedbackBar({ workoutName, workoutId, isPrivate, isFavor
                 <Box bg="white" px={4} alignItems="center" width="fit-content" margin="auto" border="solid 5px black" marginTop="1%">
                     <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                         <HStack margin="auto" display={{ base: 'none', md: 'flex' }}>
-                            <Button bg="green" color="white">
+                            {/*<Button bg="green" color="white">
                                 Like
                             </Button>
 
                             <Button bg="red">
                                 Dislike
-                            </Button>
+                             </Button>*/}
 
                             {isFavorited ?
-                                <Button bg="green" color="white" onClick={handleFavoriteWorkout}>
+                                <Button bg="gold" color="black" onClick={handleFavoriteWorkout}>
                                     Favorite
                                 </Button>
                                 :
-                                <Button bg="white" color="black" onClick={handleFavoriteWorkout}>
+                                <Button bg="grey" color="white" onClick={handleFavoriteWorkout}>
                                     Favorite
                                 </Button>
                             }
-
-                            <Button bg="red">
+                            {/*<Button bg="red">
                                 Report
-                            </Button>
-
+                            </Button>*/}
                         </HStack>
                     </Flex >
                 </Box >

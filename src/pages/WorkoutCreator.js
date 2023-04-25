@@ -1,6 +1,6 @@
 // React & React Router
 import { useState } from "react";
-import { HStack, Box } from '@chakra-ui/react';
+import { HStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 // Firebase
 import { addWorkoutToDocument } from "../context/StoreContext";

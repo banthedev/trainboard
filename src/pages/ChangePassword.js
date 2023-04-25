@@ -1,27 +1,18 @@
 //import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
 import Background from "../components/Background";
-import ExploreNav from "../components/ExploreNav";
-import WorkoutCards from "../components/WorkoutCards";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
     Box,
     Center,
     Text,
-    List,
-    ListItem,
-    ListIcon,
     useColorModeValue,
-    Flex,
-    Image,
     FormControl,
     FormLabel,
     Input,
     Button,
-    Heading,
-    Highlight,
     Stack,
+    Image
 } from '@chakra-ui/react';
 
 export default function Explore() {

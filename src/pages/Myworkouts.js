@@ -1,14 +1,15 @@
 import Navbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
 import Background from "../components/Background";
 import WorkoutCard from "../components/WorkoutCards";
-import MyWorkoutsDropdown from "../components/MyWorkoutsDropdown";
 import { HStack, Heading, Stack,Box } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy } from 'firebase/firestore'
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
 import { getUsername } from "../context/StoreContext";
+
+/*import Searchbar from "../components/Searchbar";*/
+/*import MyWorkoutsDropdown from "../components/MyWorkoutsDropdown";*/
 
 export default function Myworkouts() {
     // Auth
@@ -76,10 +77,10 @@ export default function Myworkouts() {
         <div>
             <Background />
             <Navbar />
-            <HStack >
+            {/*<HStack >
                 <Searchbar />
                 <MyWorkoutsDropdown />
-            </HStack>
+            </HStack>*/}
             <div id="myworkoutscontentdiv">
                 <style>
                     {'#myworkoutscontentdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; }'}

@@ -1,15 +1,17 @@
 //import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
+
 import Background from "../components/Background";
-import ExploreNav from "../components/ExploreNav";
+
 import ExploreWorkoutCard from "../components/ExploreWorkoutCards";
-import { Stack, Box } from '@chakra-ui/react'
+import { Stack, Box, Heading, HStack } from '@chakra-ui/react'
 import { useEffect, useState } from "react";
-import { collection, onSnapshot, where, query, getDocs } from "firebase/firestore";
+import { collection, onSnapshot, where, query } from "firebase/firestore";
 import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
 import { getUsername } from "../context/StoreContext";
+//import ExploreNav from "../components/ExploreNav";
+//import Searchbar from "../components/Searchbar";
 
 export default function ExplorePage() {
     const [exploreWorkouts, setExploreWorkouts] = useState([]);
@@ -47,12 +49,17 @@ export default function ExplorePage() {
         <div>
             <Background />
             <Navbar />
-            <Searchbar />
+            {/*<Searchbar />*/}
             <div id="explorecontentdiv">
                 <style>
                     {'#explorecontentdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; }'}
                 </style>
-                <ExploreNav />
+                {/*<ExploreNav />*/}
+                <HStack>
+                    <Heading marginTop='2%' marginLeft='5%' as='h3' size='lg' float='left' color='white'>
+                            Explore
+                    </Heading>
+                </HStack>
                 <Box sx={{ display: "flex", alignItems: "center", margin: "auto" }}>
                     <Stack
                         direction={{ base: 'column', md: 'row' }}
