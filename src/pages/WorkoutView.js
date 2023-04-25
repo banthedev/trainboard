@@ -1,6 +1,6 @@
 // React & React Router
 import React, { useState, useEffect, useCallback, createRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 // Firestore imports
 import { database } from "../firebase";
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
@@ -79,7 +79,7 @@ export default function WorkoutView() {
 
     // Handles adding an exercise to the workout
     const handleAddExercise = useCallback(() => {
-        setExercises((prevExercises) => [...prevExercises, { exerciseName: "Exercise", sets: "0", reps: "0" }]);
+        setExercises((prevExercises) => [...prevExercises, { exerciseName: "Exercise", sets: "0", reps: "0", weight: 0 }]);
     }, []);
 
     // Onclick change to editing mode
@@ -223,6 +223,11 @@ export default function WorkoutView() {
                                 <MenuItem onClick={getPDF}>PDF</MenuItem>
                             </MenuList>
                         </Menu>
+                    </Center>
+                    <Center my={5}>
+                        <Link to='/dashboard'>
+                            <Button size='lg'>Back</Button>
+                        </Link>
                     </Center>
                 </div>
             </div>

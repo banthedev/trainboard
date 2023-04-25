@@ -6,11 +6,11 @@ import {
     HStack,
     Button,
 } from '@chakra-ui/react';
-import { 
+import {
     deleteWorkoutFromCollecton,
     addFavoriteWorkoutToUserDocument,
     removeFavoriteWorkoutFromUserDocument,
-    updateFavoriteWorkout 
+    updateFavoriteWorkout
 } from '../context/StoreContext';
 import { UserAuth } from '../context/AuthContext';
 
@@ -50,7 +50,7 @@ export default function FeedbackBar({ workoutName, workoutId, isPrivate, isFavor
         }
     }
 
-        if (!ownsWorkout) {
+    if (!ownsWorkout) {
         return (
             <>
                 <Box bg="white" px={4} alignItems="center" width="fit-content" margin="auto" border="solid 5px black" marginTop="1%">
@@ -64,9 +64,15 @@ export default function FeedbackBar({ workoutName, workoutId, isPrivate, isFavor
                                 Dislike
                             </Button>
 
-                            <Button bg="green" color="white">
-                                Favorite
-                            </Button>
+                            {isFavorited ?
+                                <Button bg="green" color="white" onClick={handleFavoriteWorkout}>
+                                    Favorite
+                                </Button>
+                                :
+                                <Button bg="white" color="black" onClick={handleFavoriteWorkout}>
+                                    Favorite
+                                </Button>
+                            }
 
                             <Button bg="red">
                                 Report
@@ -88,9 +94,15 @@ export default function FeedbackBar({ workoutName, workoutId, isPrivate, isFavor
                                 Delete Workout
                             </Button>
 
-                            <Button bg="green" color="white" onClick={handleFavoriteWorkout}>
-                                Favorite
-                            </Button>
+                            {isFavorited ?
+                                <Button bg="gold" color="black" onClick={handleFavoriteWorkout} _hover={{ bg: 'gray' }}>
+                                    Favorite
+                                </Button>
+                                :
+                                <Button bg="gray" color="black" onClick={handleFavoriteWorkout} _hover={{ bg: 'gold' }}>
+                                    Favorite
+                                </Button>
+                            }
                         </HStack>
                     </Flex>
                 </Box>

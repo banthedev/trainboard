@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function WorkoutTable({ exercises, onExerciseChange }) {
-    const columns = ["exerciseName", "sets", "reps"];
+    const columns = ["exerciseName", "sets", "reps", "weight"];
 
     const handleCellChange = (value, rowIndex, colIndex) => {
         const newExercises = exercises.map((exercise, i) => {
@@ -26,7 +26,7 @@ export default function WorkoutTable({ exercises, onExerciseChange }) {
     };
 
     return (
-        <TableContainer marginLeft="20px" marginRight="20px" marginBottom="20px">
+        <TableContainer marginLeft="20px" marginRight="20px" marginBottom="20px" style={{overflowX: "hidden"}}>
             <Table variant="simple">
                 <Thead>
                     <Tr>

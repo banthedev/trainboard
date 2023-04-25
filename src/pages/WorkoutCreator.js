@@ -27,7 +27,8 @@ export default function WorkoutCreator() {
         {
             exerciseName: "Change Me",
             sets: "0",
-            reps: "0"
+            reps: "0",
+            weight: "0",
         },
     ]);
     const [saved, setSaved] = useState(false);
@@ -38,7 +39,7 @@ export default function WorkoutCreator() {
     };
 
     const handleAddExercise = () => {
-        setExercises([...exercises, { exerciseName: "Exercise", sets: "0", reps: "0" }]);
+        setExercises([...exercises, { exerciseName: "Exercise", sets: "0", reps: "0", weight: "0" }]);
     };
 
     const handleExerciseChange = (newExercises) => {

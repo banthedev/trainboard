@@ -46,9 +46,7 @@ export function addWorkoutToMain(uid, workoutName, randomId, isPrivate, currentT
         creator: uid,
         workoutName: workoutName,
         workoutId: randomId,
-        isPrivate: isPrivate,
         createdAt: currentTime,
-        favorite: false,
         workoutExercises: [...exercises],
     });
 }
