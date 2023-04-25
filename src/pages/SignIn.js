@@ -10,7 +10,6 @@ import {
     Button,
     Heading,
     Text,
-    useColorModeValue,
     Highlight,
 } from '@chakra-ui/react';
 import { useNavigate, Link } from 'react-router-dom';

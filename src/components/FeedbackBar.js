@@ -65,19 +65,17 @@ export default function FeedbackBar({ workoutName, workoutId, isPrivate, isFavor
                             </Button>
 
                             {isFavorited ?
-                                <Button bg="green" color="white" onClick={handleFavoriteWorkout}>
+                                <Button bg="gold" color="black" onClick={handleFavoriteWorkout}>
                                     Favorite
                                 </Button>
                                 :
-                                <Button bg="white" color="black" onClick={handleFavoriteWorkout}>
+                                <Button bg="grey" color="white" onClick={handleFavoriteWorkout}>
                                     Favorite
                                 </Button>
                             }
-
-                            <Button bg="red">
+                            {/*<Button bg="red">
                                 Report
-                            </Button>
-
+                            </Button>*/}
                         </HStack>
                     </Flex >
                 </Box >

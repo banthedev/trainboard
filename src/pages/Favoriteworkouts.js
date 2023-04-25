@@ -5,11 +5,13 @@ import { database } from "../firebase";
 import { UserAuth } from "../context/AuthContext";
 import { getUsername, getFavoritedWorkoutsFromCollection } from "../context/StoreContext";
 import Navbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
 import Background from "../components/Background";
-import FavoritesDropdown from "../components/FavoritesDropdown";
 import WorkoutCard from "../components/WorkoutCards";
 import ExploreWorkoutCard from "../components/ExploreWorkoutCards";
+
+//import FavoritesDropdown from "../components/FavoritesDropdown";
+/*import Searchbar from "../components/Searchbar";*/
+
 export default function Favoriteworkouts() {
     const { user, getUserId } = UserAuth();
     const [privateWorkouts, setPrivateWorkouts] = useState([]);
@@ -91,10 +93,10 @@ export default function Favoriteworkouts() {
         <div>
             <Background />
             <Navbar />
-            <HStack >
-                <Searchbar />
+            {/* <HStack >
+               <Searchbar />
                 <FavoritesDropdown />
-            </HStack>
+            </HStack>*/}
             <div id="favoritecontentdiv">
                 <style>
                     {'#favoritecontentdiv { background-color:rgba(20,20,20,0.6); margin-top:1%; display:inline-block; width:90%; }'}

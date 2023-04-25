@@ -1,9 +1,9 @@
 // React & React Router
 import React, { useState, useEffect, useCallback, createRef } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 // Firestore imports
 import { database } from "../firebase";
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 // Chakra-UI imports
 import {
     Button,
@@ -14,7 +14,9 @@ import {
     MenuDivider,
     Alert,
     AlertIcon,
-    Center
+    Center,
+    HStack,
+    Image
 } from '@chakra-ui/react';
 // Component imports
 import Navbar from "../components/Navbar";
@@ -30,7 +32,7 @@ import { UserAuth } from "../context/AuthContext";
 import { checkIfUserCreated } from "../helpers/helper.js";
 
 import { useScreenshot } from 'use-react-screenshot'
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas';  // need this for image downloading do not remove
 import { jsPDF } from "jspdf";
 
 export default function WorkoutView() {
@@ -193,7 +195,7 @@ export default function WorkoutView() {
                             <WorkoutViewTable exercises={workout.workoutExercises} onExerciseChange={handleExerciseChange} />
                         }
                         {isEditing &&
-                            <Button colorScheme='green' size='lg' onClick={handleAddExercise}>
+                            <Button color='white' bg='green' size='lg' onClick={handleAddExercise}>
                                 Add Exercise
                             </Button>
                         }
@@ -201,11 +203,13 @@ export default function WorkoutView() {
                     <Center style={{ marginBottom: 20 }}>
                         {isEditing ?
                             <div>
-                                <Button colorScheme='green' size='lg' onClick={handleSaveWorkout}>Save Changes</Button>
-                                <Button colorScheme='red' size='lg' onClick={handleCancelChanges}>Cancel Changes</Button>
+                                <HStack marginTop = "10px">
+                                    <Button color='white' bg='green' size='lg' onClick={handleSaveWorkout}>Save Changes</Button>
+                                    <Button bg='red' size='lg' onClick={handleCancelChanges}>Cancel Changes</Button>
+                                </HStack>
                             </div>
                             :
-                            <Button colorScheme='green' size='lg' onClick={handleIsEditing}>Edit Workout</Button>
+                            <Button color='white' bg='green' size='lg' onClick={handleIsEditing}>Edit Workout</Button>
                         }
                         <Menu>
                             <MenuButton
@@ -214,6 +218,7 @@ export default function WorkoutView() {
                                 label={'Muscle Group...'}
                                 bg="gold"
                                 style={{ marginLeft: 20 }}
+                                size='lg'
                             >
                                 Export
                             </MenuButton>
